@@ -1,3 +1,6 @@
+/**
+ * Created by emil on 14-9-26.
+ */
 angular.module('transaction', ['ui.router'])
 
     .config(['$stateProvider', '$httpProvider', function ($stateProvider, $httpProvider) {
@@ -25,6 +28,7 @@ angular.module('transaction', ['ui.router'])
 
                 $http({method: method, url: url, data: config}).success(function(data) {
                     defer.resolve(data);
+
                 });
 
                 return defer.promise;
@@ -38,15 +42,15 @@ angular.module('transaction', ['ui.router'])
 
         return {
             fetchCurrentAmount: function () {
-                return requestService.sendRequest('GET', "/amount");
+                return requestService.sendRequest('GET', "/bankService/getAmount");
             },
 
             deposit: function (amount) {
-                return requestService.sendRequest('POST', '/amount/deposit', {amount: amount});
+                return requestService.sendRequest('POST', '/bankService/deposit', {amount: amount});
             },
 
             withdraw: function (amount) {
-                return requestService.sendRequest("POST", "/amount/withdraw", {amount: amount});
+                return requestService.sendRequest("POST", "/bankService/withdraw", {amount: amount});
             }
         };
 
@@ -102,5 +106,7 @@ angular.module('transaction', ['ui.router'])
         };
     }])
 
+
+;
 
 ;
