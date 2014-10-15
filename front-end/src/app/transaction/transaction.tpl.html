@@ -1,0 +1,32 @@
+<div ng-controller="TransactionCtrl" align="center" class="container">
+    <form class="css-form">
+        <div class="btn-group btn-group-md">
+            <div>Balance:</div>
+
+
+            <div>{{currentAmount}} $</div>
+            <div class="input-group">
+                <form name="myform" ng-submit="create()">
+                    <input name="price_field"
+                           class="form-control"
+                           placeholder="Enter amount"
+                           ng-model="amount"
+                           require
+                           ng-pattern="/^[1-9][0-9]*(\.[0-9]{1,2})?$/">
+                    <div>
+
+                        <div>
+                            <button id="deposit" class="btn btn-primary btn-xs" type="button" ng-click="deposit(amount)"
+                                    >Deposit
+                            </button>
+
+                            <button id="withdraw" class="btn btn-primary btn-xs" type="button"
+                                    ng-click="withdraw(amount)"
+                                    >Withdraw
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </form>
+</div>
