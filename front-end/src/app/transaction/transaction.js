@@ -46,15 +46,15 @@ angular.module('transaction', ['ui.router'])
 
         return {
             fetchCurrentAmount: function () {
-                return requestService.sendRequest('GET', "/bankService/getAmount");
+                return requestService.sendRequest('GET', "/amount");
             },
 
             deposit: function (amount) {
-                return requestService.sendRequest('POST', '/bankService/deposit', {amount: amount});
+                return requestService.sendRequest('POST', '/amount/deposit', {amount: amount});
             },
 
             withdraw: function (amount) {
-                return requestService.sendRequest("POST", "/bankService/withdraw", {amount: amount});
+                return requestService.sendRequest("POST", "/amount/withdraw", {amount: amount});
             }
         };
 

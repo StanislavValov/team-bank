@@ -1,3 +1,6 @@
+/**
+ * Created by emil on 14-9-27.
+ */
 describe('Transaction module', function () {
 
     beforeEach(module('transaction'));
@@ -27,13 +30,13 @@ describe('Transaction module', function () {
 
     });
 
-    describe('requestService', function () {
+    describe('requestService', function() {
 
         var httpBackend, requestService;
 
-        beforeEach(function () {
+        beforeEach(function() {
 
-            inject(function ($injector) {
+            inject(function($injector) {
 
                 httpBackend = $injector.get('$httpBackend');
 
@@ -43,7 +46,7 @@ describe('Transaction module', function () {
 
         });
 
-        it('should send request', function () {
+        it('should send request', function() {
 
             httpBackend.expectPOST('/deposit').respond({amount: 140});
 
@@ -53,7 +56,7 @@ describe('Transaction module', function () {
 
         });
 
-        it("should simulate promise", inject(function ($q, $rootScope) {
+        it("should simulate promise", inject(function($q, $rootScope) {
 
             var deferred = $q.defer();
 
@@ -61,9 +64,7 @@ describe('Transaction module', function () {
 
             var resolvedValue;
 
-            promise.then(function (value) {
-                resolvedValue = value;
-            });
+            promise.then(function(value) { resolvedValue = value; });
 
             expect(resolvedValue).toBeUndefined();
 
@@ -88,13 +89,13 @@ describe('Transaction module', function () {
 
             mock = {sendRequest: jasmine.createSpy()};
 
-            module(function ($provide) {
+            module(function($provide) {
 
                 $provide.value('requestService', mock);
 
             });
 
-            inject(function ($injector) {
+            inject(function($injector) {
 
                 bankService = $injector.get('bankService');
 
@@ -159,7 +160,7 @@ describe('Transaction module', function () {
 
         });
 
-        it('should not redirect', function () {
+        it('should not redirect', function() {
 
             authorizationInterceptor.responseError({status: 404});
 
@@ -170,25 +171,33 @@ describe('Transaction module', function () {
         });
     });
 
-    describe('windowService', function () {
+    describe('windowService', function() {
 
         var $window, windowService;
 
-        beforeEach(function () {
+        beforeEach(function() {
 
             $window = {location: {href: jasmine.createSpy().and.returnValue('/login')}};
 
-            module(function ($provide) {
+            module(function($provide) {
 
                 $provide.value('$window', $window);
 
             });
 
-            inject(function ($injector) {
+            inject(function($injector) {
 
                 windowService = $injector.get('windowService');
 
             });
+
+        });
+
+        it('should redirect to login page', function() {
+
+            windowService.redirect();
+
+            expect($window.location.href).toBe('/login');
 
         });
 
