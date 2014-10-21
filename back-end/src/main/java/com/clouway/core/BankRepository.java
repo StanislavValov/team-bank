@@ -10,5 +10,5 @@ public interface BankRepository {
 
     TransactionStatus withdraw(BigDecimal amount);
 
-    double getAmount();
+    String getAmount();
 }
