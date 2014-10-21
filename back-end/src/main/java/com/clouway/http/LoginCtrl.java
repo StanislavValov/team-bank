@@ -37,7 +37,7 @@ public class LoginCtrl {
     }
 
     @Get
-    public void clear(){
+    public void clear() {
         error = null;
     }
 

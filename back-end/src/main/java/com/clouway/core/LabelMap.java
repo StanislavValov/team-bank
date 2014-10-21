@@ -3,7 +3,7 @@ package com.clouway.core;
 /**
  * Created by clouway on 14-9-26.
  */
-public class LabelMap implements SiteMap{
+public class LabelMap implements SiteMap {
     @Override
     public String sessionCookieName() {
         return "sid";

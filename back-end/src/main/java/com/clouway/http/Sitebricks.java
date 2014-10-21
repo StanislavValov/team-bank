@@ -30,12 +30,12 @@ public class Sitebricks extends SitebricksModule {
 
         HttpServletRequest servletRequest = request.get();
 
-        if(servletRequest != null) {
+        if (servletRequest != null) {
             Cookie[] cookies = request.get().getCookies();
 
-            if(cookies != null) {
-                for(Cookie cookie : cookies) {
-                    if("sid".equals(cookie.getName())) {
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("sid".equals(cookie.getName())) {
                         return sessionRepository.findUserBy(cookie.getValue());
                     }
                 }

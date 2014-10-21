@@ -27,7 +27,7 @@ public class BankService {
     private final SiteMap siteMap;
 
     @Inject
-    public BankService(BankRepository bankRepository, @Named("AmountValidator")Validator validator, SiteMap siteMap) {
+    public BankService(BankRepository bankRepository, @Named("AmountValidator") Validator validator, SiteMap siteMap) {
 
         this.bankRepository = bankRepository;
         this.validator = validator;
@@ -59,7 +59,7 @@ public class BankService {
 
         DTOAmount DTOAmount = request.read(DTOAmount.class).as(Json.class);
 
-        if (validator.isValid(DTOAmount)){
+        if (validator.isValid(DTOAmount)) {
             TransactionStatus info = bankRepository.withdraw(new BigDecimal(DTOAmount.getAmount()));
             return Reply.with(info).as(Json.class);
         }

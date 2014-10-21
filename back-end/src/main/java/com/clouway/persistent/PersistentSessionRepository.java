@@ -79,7 +79,7 @@ public class PersistentSessionRepository implements SessionRepository {
 
         BasicDBObject dbObject = (BasicDBObject) sessions().findOne(query, fields);
 
-        if (!Optional.fromNullable(dbObject).isPresent()){
+        if (!Optional.fromNullable(dbObject).isPresent()) {
             return Optional.absent();
         }
 

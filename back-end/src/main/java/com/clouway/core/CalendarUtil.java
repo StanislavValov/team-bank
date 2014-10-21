@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by clouway on 14-9-26.
  */
-public class CalendarUtil implements Clock{
+public class CalendarUtil implements Clock {
 
     @Override
     public Date sessionExpirationTime(Calendar calendar) {
