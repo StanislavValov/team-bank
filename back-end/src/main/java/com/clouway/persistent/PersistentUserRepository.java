@@ -1,7 +1,9 @@
 package com.clouway.persistent;
 
+import com.clouway.core.DTOUser;
 import com.clouway.core.User;
 import com.clouway.core.UserRepository;
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -16,7 +18,6 @@ import com.mongodb.DBObject;
 @Singleton
 public class PersistentUserRepository implements UserRepository {
 
-
     private final DB db;
 
     @Inject
@@ -26,31 +27,41 @@ public class PersistentUserRepository implements UserRepository {
     }
 
     @Override
-    public boolean isAuthorised(User user) {
+    public Optional<User> find(DTOUser DTOUser) {
 
-        BasicDBObject query = new BasicDBObject();
+        BasicDBObject query = new BasicDBObject("username",DTOUser.getUsername());
 
-        query.append("username", user.getUsername());
-        query.append("password", user.getPassword());
+        query.append("password", DTOUser.getPassword());
 
-        return users().count(query) == 1;
+        BasicDBObject result = (BasicDBObject) users().findOne(query,query);
+
+        if (!Optional.fromNullable(result).isPresent()){
+            return Optional.absent();
+        }
+
+        return Optional.fromNullable(new User(result.getString("username")));
     }
 
     @Override
-    public boolean exists(String username) {
+    public Optional<User> findByName(String username){
+        DBObject query = new BasicDBObject("username",username);
 
-        DBObject query = new BasicDBObject("username", username);
+        BasicDBObject result = (BasicDBObject) users().findOne(query,query);
 
-        return users().count(query) == 1;
+        if (!Optional.fromNullable(result).isPresent()){
+            return Optional.absent();
+        }
+
+        return Optional.fromNullable(new User(result.getString("username")));
     }
 
     @Override
-    public void add(User user) {
+    public void add(DTOUser DTOUser) {
 
-        DBObject query = new BasicDBObject("username",user.getUsername()).
-                append("password",user.getPassword());
+        DBObject query = new BasicDBObject("username", DTOUser.getUsername()).
+                append("password", DTOUser.getPassword());
 
-        createAccount(user.getUsername());
+        createAccount(DTOUser.getUsername());
         users().insert(query);
     }
 
@@ -63,7 +74,7 @@ public class PersistentUserRepository implements UserRepository {
         BasicDBObject query = new BasicDBObject();
 
         query.append("name", name);
-        query.append("amount",0);
+        query.append("amount", "0");
 
         db.getCollection("bank_accounts").insert(query);
     }

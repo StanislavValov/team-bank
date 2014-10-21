@@ -1,13 +1,15 @@
 package com.clouway.core;
 
+import java.math.BigDecimal;
+
 /**
  * Created by emil on 14-9-25.
  */
 public class TransactionStatus {
     public final String message;
-    public final double amount;
+    public final String amount;
 
-    public TransactionStatus(String message, double amount) {
+    public TransactionStatus(String message, String amount) {
 
         this.message = message;
         this.amount = amount;
@@ -20,7 +22,7 @@ public class TransactionStatus {
 
         TransactionStatus that = (TransactionStatus) o;
 
-        if (Double.compare(that.amount, amount) != 0) return false;
+        if (amount != null ? !amount.equals(that.amount) : that.amount != null) return false;
         if (message != null ? !message.equals(that.message) : that.message != null) return false;
 
         return true;
@@ -28,11 +30,8 @@ public class TransactionStatus {
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = message != null ? message.hashCode() : 0;
-        temp = Double.doubleToLongBits(amount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        int result = message != null ? message.hashCode() : 0;
+        result = 31 * result + (amount != null ? amount.hashCode() : 0);
         return result;
     }
 }

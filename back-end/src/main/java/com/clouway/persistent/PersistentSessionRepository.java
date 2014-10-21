@@ -38,9 +38,9 @@ public class PersistentSessionRepository implements SessionRepository {
 
         DBObject projection = new BasicDBObject("username", 1);
 
-        BasicDBObject userName = (BasicDBObject) sessions().findOne(criteria, projection);
+        BasicDBObject username = (BasicDBObject) sessions().findOne(criteria, projection);
 
-        return new CurrentUser(userName.getString("username"));
+        return new CurrentUser(username.getString("username"));
     }
 
     @Override

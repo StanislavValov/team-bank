@@ -11,13 +11,20 @@ angular.module('team-bank', [
 
     }])
 
-    .controller("LogoutCtrl", ["$scope", '$http', 'windowService', function ($scope, $http, windowService) {
+    .service('logoutService', ['requestService', function (requestService) {
+
+        return{
+            logout: function () {
+                return requestService.sendRequest('POST', '/logout');
+            }
+        };
+    }])
+
+    .controller("LogoutCtrl", ["$scope", 'windowService','logoutService', function ($scope, windowService, logoutService) {
 
         $scope.logout = function () {
-            $http.post("/logout")
-                .success(function () {
-                    windowService.redirect();
-                });
+            logoutService.logout().then(function () {
+                windowService.redirect();
+            });
         };
     }]);
-    //TODO: need to implement service and move http in that service

@@ -1,13 +1,15 @@
 package com.clouway.core;
 
+import com.google.common.base.Optional;
+
 /**
  * Created by emil on 14-9-27.
  */
 public interface UserRepository {
 
-    boolean isAuthorised(User user);
+    Optional<User> find(DTOUser DTOUser);
 
-    boolean exists(String username);
+    Optional<User> findByName(String username);
 
-    void add(User user);
+    void add(DTOUser DTOUser);
 }

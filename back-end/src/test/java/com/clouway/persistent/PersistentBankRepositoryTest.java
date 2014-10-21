@@ -11,15 +11,16 @@ import com.mongodb.MongoClient;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by emil on 14-9-25.
- */
-public class BankRepositoryTest {
+* Created by emil on 14-9-25.
+*/
+public class PersistentBankRepositoryTest {
 
     private PersistentBankRepository persistentBankRepository;
     private BankUtil bankUtil;
@@ -28,12 +29,12 @@ public class BankRepositoryTest {
 
     private TransactionMessages transactionMessages = new TransactionMessages() {
         @Override
-        public String success() {
+        public String onSuccess() {
             return "Success";
         }
 
         @Override
-        public String failed() {
+        public String onFailuer() {
             return "Failed";
         }
     };
@@ -62,10 +63,10 @@ public class BankRepositoryTest {
 
         pretendThat(clientName("Ivan"), amount(100d));
 
-        TransactionStatus info = persistentBankRepository.deposit(20d);
+        TransactionStatus info = persistentBankRepository.deposit(BigDecimal.valueOf(20));
 
         assertThat(info.message, is("Success"));
-        assertThat(info.amount, is(120d));
+        assertThat(info.amount,is("120.0"));
 
     }
 
@@ -75,11 +76,11 @@ public class BankRepositoryTest {
 
         pretendThat(clientName("Ivan"), amount(100d));
 
-        persistentBankRepository.deposit(20d);
-        TransactionStatus info = persistentBankRepository.deposit(80d);
+        persistentBankRepository.deposit(BigDecimal.valueOf(20));
+        TransactionStatus info = persistentBankRepository.deposit(BigDecimal.valueOf(80));
 
         assertThat(info.message, is("Success"));
-        assertThat(info.amount, is(200d));
+        assertThat(info.amount, is("200.0"));
 
     }
 
@@ -88,10 +89,10 @@ public class BankRepositoryTest {
 
         pretendThat(clientName("Ivan"), amount(200d));
 
-        TransactionStatus info = persistentBankRepository.withdraw(120d);
+        TransactionStatus info = persistentBankRepository.withdraw(BigDecimal.valueOf(120));
 
         assertThat(info.message, is("Success"));
-        assertThat(info.amount, is(80d));
+        assertThat(info.amount, is("80.0"));
 
     }
 
@@ -100,10 +101,10 @@ public class BankRepositoryTest {
 
         pretendThat(clientName("Ivan"), amount(100d));
 
-        TransactionStatus info = persistentBankRepository.withdraw(200d);
+        TransactionStatus info = persistentBankRepository.withdraw(BigDecimal.valueOf(200));
 
         assertThat(info.message, is("Failed"));
-        assertThat(info.amount, is(100d));
+        assertThat(info.amount, is("100.0"));
 
     }
 

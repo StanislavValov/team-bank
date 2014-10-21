@@ -1,5 +1,7 @@
 package com.clouway.core;
 
+import com.google.common.base.Optional;
+
 import java.util.Date;
 
 /**
@@ -13,5 +15,5 @@ public interface SessionRepository {
 
     void remove(String sessionId);
 
-    com.google.common.base.Optional<Session> find(String sessionId);
+    Optional<Session> find(String sessionId);
 }

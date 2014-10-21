@@ -1,6 +1,7 @@
 package com.clouway.http;
 
 import com.clouway.core.*;
+import com.google.common.base.Optional;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -25,7 +26,7 @@ public class LoginCtrlTest {
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    private User user;
+    private DTOUser dtoUser;
     private LoginCtrl loginCtrl;
     private FakeHttpResponse response;
 
@@ -44,7 +45,7 @@ public class LoginCtrlTest {
     @Before
     public void setUp(){
 
-        user = new User();
+        dtoUser = new DTOUser();
         loginCtrl = new LoginCtrl(userRepository, sessionRepository, idGenerator, siteMap);
 
         response = new FakeHttpResponse(){
@@ -61,10 +62,10 @@ public class LoginCtrlTest {
 
         context.checking(new Expectations(){
             {
-                oneOf(userRepository).isAuthorised(user);
-                will(returnValue(true));
+                oneOf(userRepository).find(dtoUser);
+                will(returnValue(Optional.of(dtoUser)));
 
-                oneOf(idGenerator).generateFor(user);
+                oneOf(idGenerator).generateFor(dtoUser);
                 will(returnValue("sessionId"));
 
                 oneOf(siteMap).index();
@@ -73,7 +74,7 @@ public class LoginCtrlTest {
                 oneOf(siteMap).sessionCookieName();
                 will(returnValue("sId"));
 
-                oneOf(sessionRepository).addUser(user.getUsername(), "sessionId");
+                oneOf(sessionRepository).addUser(dtoUser.getUsername(), "sessionId");
             }
         });
         assertThat(loginCtrl.authenticate(response), is("index.html"));
@@ -84,8 +85,8 @@ public class LoginCtrlTest {
 
         context.checking(new Expectations(){
             {
-                oneOf(userRepository).isAuthorised(user);
-                will(returnValue(false));
+                oneOf(userRepository).find(dtoUser);
+                will(returnValue(Optional.absent()));
 
                 oneOf(siteMap).loginFailed();
                 will(returnValue("Error"));
