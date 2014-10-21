@@ -13,8 +13,6 @@ public class Session {
     private String sessionId;
     private Date expirationTime;
 
-    private SessionID sessionID;
-
     public Session(String username, String sessionId, Date expirationTime) {
         this.username = username;
         this.sessionId = sessionId;
