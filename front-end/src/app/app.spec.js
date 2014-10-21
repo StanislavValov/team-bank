@@ -1,33 +1,30 @@
-xdescribe("logout behavior", function () {
-
-    var scope, http, controller, _windowService;
+describe("logout behavior", function () {
 
     beforeEach(module('team-bank'));
 
 
-    beforeEach(inject(function ($rootScope, $http, $controller, $injector) {
+    describe('logoutService', function () {
 
-        scope = $rootScope.$new();
+        var _logoutService, _requestService;
 
-        http = $http;
+        beforeEach(function () {
+            _requestService = {sendRequest: jasmine.createSpy()};
 
-        _windowService = $injector.get('windowService');
+            module(function ($provide) {
+                $provide.value('requestService', _requestService);
+            });
 
-//        spyOn(_windowService, 'redirect');
+            inject(function ($injector) {
+                _logoutService = $injector.get('logoutService');
+            });
 
-        controller = $controller('LogoutCtrl', {
-            '$scope': scope,
-            '$http': http,
-            'windowService': _windowService
         });
-    }));
 
-    it("should be redirected to login page", function () {
 
-        scope.logout();
+        it('should redirect to login', function () {
+            _logoutService.logout();
 
-        scope.$apply();
-
-        expect(_windowService.redirect).toHaveBeenCalled();
+            expect(_requestService.sendRequest).toHaveBeenCalledWith("POST", "/logout");
+        });
     });
 });

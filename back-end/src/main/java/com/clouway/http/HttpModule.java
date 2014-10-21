@@ -35,13 +35,13 @@ public class HttpModule extends ServletModule {
     public TransactionMessages getTransactionMessages() {
         return new TransactionMessages() {
             @Override
-            public String success() {
-                return "Transaction success";
+            public String onSuccess() {
+                return "Transaction onSuccess";
             }
 
             @Override
-            public String failed() {
-                return "Transaction failed";
+            public String onFailuer() {
+                return "Transaction onFailuer";
             }
         };
     }

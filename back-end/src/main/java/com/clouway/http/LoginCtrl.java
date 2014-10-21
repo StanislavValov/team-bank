@@ -25,7 +25,7 @@ public class LoginCtrl {
     private IdGenerator idGenerator;
     private SiteMap siteMap;
     private String error;
-    private User user = new User();
+    private DTOUser dtoUser = new DTOUser();
 
     @Inject
     public LoginCtrl(UserRepository userRepository, SessionRepository sessionRepository, IdGenerator idGenerator, SiteMap siteMap) {
@@ -44,23 +44,23 @@ public class LoginCtrl {
     @Post
     public String authenticate(HttpServletResponse response) {
 
-        if (!userRepository.isAuthorised(user)) {
+        if (!userRepository.find(dtoUser).isPresent()) {
             error = siteMap.loginFailed();
             return null;
         }
 
-        String sessionId = idGenerator.generateFor(user);
-        sessionRepository.addUser(user.getUsername(), sessionId);
+        String sessionId = idGenerator.generateFor(dtoUser);
+        sessionRepository.addUser(dtoUser.getUsername(), sessionId);
         response.addCookie(new Cookie(siteMap.sessionCookieName(), sessionId));
         return siteMap.index();
     }
 
-    public User getUser() {
-        return user;
+    public DTOUser getDtoUser() {
+        return dtoUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setDtoUser(DTOUser dtoUser) {
+        this.dtoUser = dtoUser;
     }
 
     public String getError() {

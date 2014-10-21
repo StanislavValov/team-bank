@@ -5,13 +5,10 @@ package com.clouway.core;
  */
 public class CurrentUser {
 
-    private final String name;
+    public final String name;
 
     public CurrentUser(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
 }

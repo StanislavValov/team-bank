@@ -12,6 +12,8 @@ import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Get;
 import com.google.sitebricks.http.Post;
 
+import java.math.BigDecimal;
+
 /**
  * Created by emil on 14-9-25.
  */
@@ -42,10 +44,10 @@ public class BankService {
     @Post
     public Reply<?> deposit(Request request) {
 
-        Amount amount = request.read(Amount.class).as(Json.class);
+        DTOAmount dtoAmount = request.read(DTOAmount.class).as(Json.class);
 
-        if (validator.isValid(amount)) {
-            TransactionStatus info = bankRepository.deposit(amount.getAmount());
+        if (validator.isValid(dtoAmount)) {
+            TransactionStatus info = bankRepository.deposit(new BigDecimal(dtoAmount.getAmount()));
             return Reply.with(info).as(Json.class);
         }
         return Reply.with(siteMap.transactionError()).error();
@@ -55,10 +57,10 @@ public class BankService {
     @Post
     public Reply<?> withdraw(Request request) {
 
-        Amount amount = request.read(Amount.class).as(Json.class);
+        DTOAmount DTOAmount = request.read(DTOAmount.class).as(Json.class);
 
-        if (validator.isValid(amount)){
-            TransactionStatus info = bankRepository.withdraw(amount.getAmount());
+        if (validator.isValid(DTOAmount)){
+            TransactionStatus info = bankRepository.withdraw(new BigDecimal(DTOAmount.getAmount()));
             return Reply.with(info).as(Json.class);
         }
         return Reply.with(siteMap.transactionError()).error();

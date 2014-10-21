@@ -1,7 +1,7 @@
 package com.clouway.http;
 
 import com.clouway.core.SiteMap;
-import com.clouway.core.User;
+import com.clouway.core.DTOUser;
 import com.clouway.core.UserRepository;
 import com.clouway.core.Validator;
 import com.google.inject.Inject;
@@ -24,10 +24,10 @@ public class RegistrationCtrl {
     private UserRepository repository;
     private SiteMap siteMap;
     private String error;
-    private User user = new User();
+    private DTOUser dtoUser = new DTOUser();
 
     @Inject
-    public RegistrationCtrl(@Named("UserValidator")Validator validator, UserRepository repository, SiteMap siteMap) {
+    public RegistrationCtrl(@Named("UserValidator") Validator validator, UserRepository repository, SiteMap siteMap) {
 
         this.validator = validator;
         this.repository = repository;
@@ -37,28 +37,27 @@ public class RegistrationCtrl {
     @Post
     public String register() {
 
-        if (!repository.exists(user.getUsername())){
+        if (validator.isValid(dtoUser) &&
+                !repository.findByName(dtoUser.getUsername()).isPresent()) {
 
-            if (validator.isValid(user)){
-                repository.add(user);
-                return "/login";
-            }
+            repository.add(dtoUser);
+            return siteMap.loginPage();
         }
         error = siteMap.registrationError();
         return null;
     }
 
     @Get
-    public void clear(){
+    public void clear() {
         error = null;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setDtoUser(DTOUser dtoUser) {
+        this.dtoUser = dtoUser;
     }
 
-    public User getUser() {
-        return user;
+    public DTOUser getDtoUser() {
+        return dtoUser;
     }
 
     public String getError() {

@@ -1,6 +1,6 @@
 package com.clouway.http.fake;
 
-import com.clouway.core.Amount;
+import com.clouway.core.DTOAmount;
 
 import static com.google.sitebricks.headless.Request.*;
 
@@ -8,17 +8,14 @@ import static com.google.sitebricks.headless.Request.*;
  * Created by emil on 14-9-25.
  */
 public class FakeRequestReader implements RequestRead {
-    public final String clientName;
-    public final double amount;
+    public DTOAmount amount;
 
-    public FakeRequestReader(String clientName, double amount) {
-
-        this.clientName = clientName;
+    public FakeRequestReader(DTOAmount amount) {
         this.amount = amount;
     }
 
     @Override
     public Object as(Class aClass) {
-        return new Amount(amount);
+        return amount;
     }
 }

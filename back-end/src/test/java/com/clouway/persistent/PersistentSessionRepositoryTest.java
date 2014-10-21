@@ -2,7 +2,7 @@ package com.clouway.persistent;
 
 import com.clouway.core.Clock;
 import com.clouway.core.Session;
-import com.clouway.core.User;
+import com.clouway.core.DTOUser;
 import com.google.common.base.Optional;
 import com.google.inject.util.Providers;
 import com.mongodb.DB;
@@ -24,7 +24,7 @@ public class PersistentSessionRepositoryTest {
 
     private PersistentSessionRepository persistentSessionRepository;
     private DB db;
-    private User user;
+    private DTOUser DTOUser;
     private Session session;
 
     @Before
@@ -34,7 +34,7 @@ public class PersistentSessionRepositoryTest {
 
         session = new Session("username", "sessionid", new Date());
 
-        user = new User();
+        DTOUser = new DTOUser();
         
         db = mongoClient.getDB("team-bank-test");
 
@@ -59,20 +59,20 @@ public class PersistentSessionRepositoryTest {
 
     @Test
     public void addUserToSessionRepo() {
-        persistentSessionRepository.addUser(user.getUsername(), session.getSessionId());
+        persistentSessionRepository.addUser(DTOUser.getUsername(), session.getSessionId());
         assertThat(db.getCollection("sessions").findOne(), notNullValue());
     }
 
     @Test
     public void removeUserSession() {
-        persistentSessionRepository.addUser(user.getUsername(),session.getSessionId());
+        persistentSessionRepository.addUser(DTOUser.getUsername(),session.getSessionId());
         persistentSessionRepository.remove(session.getSessionId());
         assertThat(db.getCollection("sessions").findOne(), nullValue());
     }
 
     @Test
     public void findWillReturnCorrectSessionObject() {
-        persistentSessionRepository.addUser(user.getUsername(),session.getSessionId());
+        persistentSessionRepository.addUser(DTOUser.getUsername(),session.getSessionId());
         Optional<Session>sessionOptional = Optional.fromNullable(session);
         assertThat(persistentSessionRepository.find(session.getSessionId()), is(sessionOptional));
     }

@@ -11,8 +11,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static com.clouway.custommatcher.ReplyMatcher.contains;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * Created by emil on 14-9-24.
@@ -22,19 +25,19 @@ public class BankServiceTest {
     private BankService bankService;
     private FakeRequestReader fakeRequestReader;
     private TransactionStatus transactionStatus;
-    private Amount amount;
+    private DTOAmount dtoAmount = new DTOAmount();
 
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Mock
-    private BankRepository bankRepository = null;
+    private BankRepository bankRepository;
 
     @Mock
-    private Request request = null;
+    private Request request;
 
     @Mock
-    private Validator<Amount> validator;
+    private Validator validator;
 
     @Mock
     private SiteMap siteMap;
@@ -42,15 +45,15 @@ public class BankServiceTest {
     @Before
     public void setUp() {
 
-        amount = new Amount(100d);
-
         CurrentUser currentUser = new CurrentUser("Ivan");
 
         bankService = new BankService(bankRepository, validator, siteMap);
 
-        fakeRequestReader = new FakeRequestReader(currentUser.getName(), amount.getAmount());
+        dtoAmount.setAmount("123");
 
-        transactionStatus = new TransactionStatus(message("Success"), amount(100d));
+        fakeRequestReader = new FakeRequestReader(dtoAmount);
+
+        transactionStatus = new TransactionStatus(message("Success"),"100");
 
     }
 
@@ -59,14 +62,13 @@ public class BankServiceTest {
 
         context.checking(new Expectations() {
             {
-
-                oneOf(request).read(Amount.class);
+                oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
-                oneOf(validator).isValid(amount);
+                oneOf(validator).isValid(dtoAmount);
                 will(returnValue(true));
 
-                oneOf(bankRepository).deposit(amount(100d));
+                oneOf(bankRepository).deposit(new BigDecimal(dtoAmount.getAmount()));
                 will(returnValue(transactionStatus));
             }
         });
@@ -82,10 +84,10 @@ public class BankServiceTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(request).read(Amount.class);
+                oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
-                oneOf(validator).isValid(amount);
+                oneOf(validator).isValid(dtoAmount);
                 will(returnValue(false));
 
                 oneOf(siteMap).transactionError();
@@ -99,16 +101,18 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount() {
 
+        dtoAmount.setAmount("123");
+
         context.checking(new Expectations() {
             {
 
-                oneOf(request).read(Amount.class);
+                oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
-                oneOf(validator).isValid(amount);
+                oneOf(validator).isValid(dtoAmount);
                 will(returnValue(true));
 
-                oneOf(bankRepository).withdraw(amount(100d));
+                oneOf(bankRepository).withdraw(new BigDecimal(dtoAmount.getAmount()));
                 will(returnValue(transactionStatus));
             }
         });
@@ -123,10 +127,10 @@ public class BankServiceTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(request).read(Amount.class);
+                oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
-                oneOf(validator).isValid(amount);
+                oneOf(validator).isValid(dtoAmount);
                 will(returnValue(false));
 
                 oneOf(siteMap).transactionError();
@@ -146,13 +150,13 @@ public class BankServiceTest {
             {
 
                 oneOf(bankRepository).getBalance();
-                will(returnValue(5.1d));
+                will(returnValue("5.1"));
             }
         });
 
         Reply<?> reply = bankService.getCurrentAmount();
 
-        assertThat(reply, contains(5.1d));
+        assertThat(reply, contains("5.1"));
 
     }
 
@@ -160,7 +164,7 @@ public class BankServiceTest {
         return message;
     }
 
-    private double amount(double amount) {
+    private BigDecimal amount(BigDecimal amount) {
         return amount;
     }
 
