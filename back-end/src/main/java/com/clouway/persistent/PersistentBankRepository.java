@@ -45,9 +45,9 @@ public class PersistentBankRepository implements BankRepository {
 
         BasicDBObject update = new BasicDBObject("$set", new BasicDBObject("amount", newAmount.toString()));
 
-        bankAccounts().update(query,update);
+        bankAccounts().update(query, update);
 
-        return new TransactionStatus(transactionMessages.onSuccess(),newAmount.toString());
+        return new TransactionStatus(transactionMessages.onSuccess(), newAmount.toString());
     }
 
     /**
@@ -72,9 +72,9 @@ public class PersistentBankRepository implements BankRepository {
 
         DBObject update = new BasicDBObject("$set", new BasicDBObject("amount", newAmount.toString()));
 
-        bankAccounts().update(query,update);
+        bankAccounts().update(query, update);
 
-        return new TransactionStatus(transactionMessages.onSuccess(),newAmount.toString());
+        return new TransactionStatus(transactionMessages.onSuccess(), newAmount.toString());
     }
 
     @Override

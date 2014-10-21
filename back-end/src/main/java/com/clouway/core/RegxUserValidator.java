@@ -4,7 +4,7 @@ package com.clouway.core;
  * Created by clouway on 14-10-2.
  */
 
-public class RegxUserValidator implements Validator<DTOUser>{
+public class RegxUserValidator implements Validator<DTOUser> {
 
     @Override
     public boolean isValid(DTOUser Object) {

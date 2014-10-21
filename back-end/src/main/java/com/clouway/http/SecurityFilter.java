@@ -43,7 +43,7 @@ public class SecurityFilter implements Filter {
 
         Date currentTime = new Timestamp(System.currentTimeMillis());
 
-        if (session==null || session.getExpirationTime().before(currentTime)) {
+        if (session == null || session.getExpirationTime().before(currentTime)) {
             response.setStatus(401);
             return;
         }

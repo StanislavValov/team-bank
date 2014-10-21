@@ -29,13 +29,13 @@ public class PersistentUserRepository implements UserRepository {
     @Override
     public Optional<User> find(DTOUser DTOUser) {
 
-        BasicDBObject query = new BasicDBObject("username",DTOUser.getUsername());
+        BasicDBObject query = new BasicDBObject("username", DTOUser.getUsername());
 
         query.append("password", DTOUser.getPassword());
 
-        BasicDBObject result = (BasicDBObject) users().findOne(query,query);
+        BasicDBObject result = (BasicDBObject) users().findOne(query, query);
 
-        if (!Optional.fromNullable(result).isPresent()){
+        if (!Optional.fromNullable(result).isPresent()) {
             return Optional.absent();
         }
 
@@ -43,12 +43,12 @@ public class PersistentUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByName(String username){
-        DBObject query = new BasicDBObject("username",username);
+    public Optional<User> findByName(String username) {
+        DBObject query = new BasicDBObject("username", username);
 
-        BasicDBObject result = (BasicDBObject) users().findOne(query,query);
+        BasicDBObject result = (BasicDBObject) users().findOne(query, query);
 
-        if (!Optional.fromNullable(result).isPresent()){
+        if (!Optional.fromNullable(result).isPresent()) {
             return Optional.absent();
         }
 
@@ -69,7 +69,7 @@ public class PersistentUserRepository implements UserRepository {
         return db.getCollection("users");
     }
 
-    private void createAccount(String name){
+    private void createAccount(String name) {
 
         BasicDBObject query = new BasicDBObject();
 

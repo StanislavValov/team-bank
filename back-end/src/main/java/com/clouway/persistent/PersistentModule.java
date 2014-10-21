@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 /**
  * Created by emil on 14-9-24.
  */
-public class PersistentModule extends AbstractModule{
+public class PersistentModule extends AbstractModule {
     @Override
     protected void configure() {
 
