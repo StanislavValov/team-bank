@@ -111,8 +111,22 @@
             <version>13.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
+
 
     </dependencies>
+
+
 
     <build>
         <finalName>team-bank</finalName>
@@ -129,6 +143,110 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.clouway.http.JettyServer</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>jarjar-maven-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jarjar</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>aopalliance:aopalliance</include>
+                                <include>com.google.cod.findbugs:jsr305</include>
+                                <include>com.google.guava:guava</include>
+                                <include>com.google.inject.extensions:guice-multibindings</include>
+                                <include>com.google.inject.extensions:guice-servlet</include>
+                                <include>com.google.inject:guice</include>
+                                <include>com.google.sitebricks:sitebricks</include>
+                                <include>com.google.sitebricks:sitebricks-annotations</include>
+                                <include>com.google.sitebricks:sitebricks-client</include>
+                                <include>com.google.sitebricks:sitebricks-converter</include>
+                                <include>com.intellij:annotations</include>
+                                <include>com.ning:async-http-client</include>
+                                <include>com.thoughtworks.xstream:xstream</include>
+                                <include>javax.inject:javax.inject</include>
+                                <include>javax.servlet.jsp:javax.servlet.jsp-api</include>
+                                <include>javax.servlet:javax.servlet-api</include>
+                                <include>javax.servlet:servlet-api</include>
+                                <include>junit:junit</include>
+                                <include>junit:junit-dep</include>
+                                <include>net.jcip:jcip-annotations</include>
+                                <include>org.codehaus.jackson:jackson-core-asl</include>
+                                <include>org.codehaus.jackson:jackson-mapper-asl</include>
+                                <include>org.eclipse.jetty.aggregate:jetty-webapp</include>
+                                <include>org.eclipse.jetty.orbit:javax.servlet.jsp.jstl</include>
+                                <include>org.eclipse.jetty.orbit:javax.servlet</include>
+                                <include>org.eclipse.jetty.orbit:org.eclipse.jdt.core</include>
+                                <include>org.eclipse.jetty.toolchain:jetty-schemas</include>
+                                <include>org.eclipse.jetty:jetty-jsp</include>
+                                <include>org.glassfish.web:javax.servlet.jsp.jstl</include>
+                                <include>org.glassfish.web:javax.servlet.jsp</include>
+                                <include>org.glassfish:javax.el</include>
+                                <include>org.hamcrest:hamcrest-all</include>
+                                <include>org.hamcrest:hamcrest-core</include>
+                                <include>org.jboss.netty:netty</include>
+                                <include>org.jmock:jmock</include>
+                                <include>org.jmock:jmock-junit</include>
+                                <include>org.jsoup:jsoup</include>
+                                <include>org.mongodb:mongo-java-driver</include>
+                                <include>org.mvel:mvel2</include>
+                                <include>org.slf4j:slf4j-api</include>
+                                <include>org.slf4j:slf4j-simple</include>
+                                <include>org.sonatype.sisu:sisu-guava</include>
+                                <include>xpp3:xpp3_min</include>
+
+                            </includes>
+
+                            <rules>
+
+                                <rule>
+                                    <pattern>org.objectweb.asm.**</pattern>
+                                    <result>com.google.inject.internal.asm.@1</result>
+                                </rule>
+
+                                <rule>
+                                    <pattern>net.sf.cglib.**</pattern>
+                                    <result>com.google.inject.internal.cglib.@1</result>
+                                </rule>
+
+                                <keep>
+                                    <pattern>com.clouway.**</pattern>
+                                </keep>
+
+                                <keep>
+                                    <pattern>ch.qos.logback.core.rolling.**</pattern>
+                                </keep>
+
+                                <keep>
+                                    <pattern>ch.qos.logback.classic.net.**</pattern>
+                                </keep>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
     </build>
 
 </project>

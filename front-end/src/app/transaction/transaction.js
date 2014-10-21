@@ -112,5 +112,3 @@ angular.module('transaction', ['ui.router'])
 
 
 ;
-
-;

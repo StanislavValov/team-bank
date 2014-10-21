@@ -160,7 +160,7 @@ module.exports = function ( grunt ) {
                       '<%= compile_dir %>/assets/ngbp-0.3.2.js',
                       '<%= compile_dir %>/index.html'
                   ],
-                  dest: '../back-end/src/main/webapp'
+                  dest: '../frontend'
               }
           ]
       }
@@ -647,5 +647,7 @@ module.exports = function ( grunt ) {
   });
 
   grunt.registerTask('copy_minify_server', ['compile', 'copy:minyfy_to_server']);
+
+    grunt.registerTask('package', ['build', 'copy_minify_server']);
 
 };
