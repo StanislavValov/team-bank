@@ -4,6 +4,7 @@ import com.clouway.core.SessionRepository;
 import com.clouway.core.UserRepository;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.name.Named;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
@@ -21,9 +22,12 @@ public class PersistentModule extends AbstractModule {
     }
 
     @Provides
-    public DB getDBProvider() throws UnknownHostException {
-        MongoClient mongoClient = new MongoClient();
+    public DB getDBProvider(@Named("db.host") String dbHost,
+                            @Named("db.port") Integer dbPort,
+                            @Named("db.name") String dbName) throws UnknownHostException {
 
-        return mongoClient.getDB("team-bank");
+        MongoClient mongoClient = new MongoClient(dbHost, dbPort);
+
+        return mongoClient.getDB(dbName);
     }
 }
