@@ -19,8 +19,8 @@ public class HttpModule extends ServletModule {
     @Override
     protected void configureServlets() {
 
-        filter("/amount/*").through(SecurityFilter.class);
-        filter("/amount").through(SecurityFilter.class);
+        filter("/*").through(SecurityFilter.class);
+//        filter("/*").through(WelcomeFilter.class);
 
         bind(BankRepository.class).to(PersistentBankRepository.class);
         bind(IdGenerator.class).to(SessionIdGenerator.class);

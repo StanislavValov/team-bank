@@ -33,4 +33,14 @@ public class LabelMap implements SiteMap {
     public String transactionError() {
         return "Transaction error";
     }
+
+    @Override
+    public String registrationPage() {
+        return "/registration";
+    }
+
+    @Override
+    public String logout() {
+        return "logout";
+    }
 }

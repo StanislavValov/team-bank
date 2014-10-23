@@ -68,16 +68,13 @@ public class LoginCtrlTest {
                 oneOf(idGenerator).generateFor(dtoUser);
                 will(returnValue("sessionId"));
 
-                oneOf(siteMap).index();
-                will(returnValue("index.html"));
-
                 oneOf(siteMap).sessionCookieName();
                 will(returnValue("sId"));
 
                 oneOf(sessionRepository).addUser(dtoUser.getUsername(), "sessionId");
             }
         });
-        assertThat(loginCtrl.authenticate(response), is("index.html"));
+        assertThat(loginCtrl.authenticate(response), is("/"));
     }
 
     @Test
@@ -92,6 +89,6 @@ public class LoginCtrlTest {
                 will(returnValue("Error"));
             }
         });
-        assertThat(loginCtrl.authenticate(response), nullValue());
+        assertThat(loginCtrl.authenticate(response), is("/login"));
     }
 }

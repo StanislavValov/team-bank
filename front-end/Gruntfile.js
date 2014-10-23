@@ -154,7 +154,7 @@ module.exports = function ( grunt ) {
           files: [
               {
                   expand: true,
-                  cwd: '.',
+                  cwd: '',
                   src: [
                       '<%= compile_dir %>/assets/ngbp-0.3.2.css',
                       '<%= compile_dir %>/assets/ngbp-0.3.2.js',

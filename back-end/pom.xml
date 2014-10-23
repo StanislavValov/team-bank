@@ -123,6 +123,17 @@
             <version>1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>servlet-api-3.0</artifactId>
+            <version>7.0.0pre2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty</artifactId>
+            <version>6.1.25</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -209,6 +220,7 @@
                                 <include>org.jmock:jmock-junit</include>
                                 <include>org.jsoup:jsoup</include>
                                 <include>org.mongodb:mongo-java-driver</include>
+                                <include>org.mortbay.jetty:servlet-api-3.0</include>
                                 <include>org.mvel:mvel2</include>
                                 <include>org.slf4j:slf4j-api</include>
                                 <include>org.slf4j:slf4j-simple</include>

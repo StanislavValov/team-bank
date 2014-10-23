@@ -16,4 +16,8 @@ public interface SiteMap {
     String loginFailed();
 
     String transactionError();
+
+    String registrationPage();
+
+    String logout();
 }

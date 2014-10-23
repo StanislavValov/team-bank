@@ -1,4 +1,5 @@
 #!/bin/sh
+
 cd back-end
 
 mvn clean package
@@ -12,6 +13,7 @@ cd front-end
 grunt package
 
 cd ..
+
 
 scp -r frontend/ clouway@dev.telcong.com:/opt/telcong/bank
 
