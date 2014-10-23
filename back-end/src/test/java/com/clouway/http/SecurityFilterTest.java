@@ -42,72 +42,6 @@ public class SecurityFilterTest {
         securityFilter = new SecurityFilter(Providers.of(session), siteMap);
     }
 
-
-    @Test
-    public void whenRequestPageIsLogin() throws Exception {
-
-        context.checking(new Expectations() {{
-
-            oneOf(request).getRequestURI();
-            will(returnValue("/login"));
-
-            oneOf(siteMap).loginPage();
-            will(returnValue("/login"));
-
-            oneOf(filterChain).doFilter(request, response);
-        }
-        });
-
-        securityFilter.doFilter(request, response, filterChain);
-
-    }
-
-    @Test
-    public void whenRequestPageIsRegistration() throws Exception {
-
-        context.checking(new Expectations() {{
-
-            oneOf(request).getRequestURI();
-            will(returnValue("/registration"));
-
-            oneOf(siteMap).loginPage();
-            will(returnValue("/login"));
-
-            oneOf(siteMap).registrationPage();
-            will(returnValue("/registration"));
-
-            oneOf(filterChain).doFilter(request, response);
-        }
-        });
-
-        securityFilter.doFilter(request, response, filterChain);
-
-    }
-
-    @Test
-    public void whenRequestPageIsLogout() throws Exception {
-
-        context.checking(new Expectations() {{
-
-            oneOf(request).getRequestURI();
-            will(returnValue("/logout"));
-
-            oneOf(siteMap).loginPage();
-            will(returnValue("/login"));
-
-            oneOf(siteMap).registrationPage();
-            will(returnValue("/registration"));
-
-            oneOf(siteMap).logout();
-            will(returnValue("/logout"));
-
-            oneOf(filterChain).doFilter(request, response);
-        }
-        });
-
-        securityFilter.doFilter(request, response, filterChain);
-    }
-
     @Test
     public void sessionIsNotExpired() throws IOException, ServletException {
 
@@ -117,14 +51,6 @@ public class SecurityFilterTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(siteMap).loginPage();
-                will(returnValue("/login"));
-
-                oneOf(siteMap).registrationPage();
-                will(returnValue("/registration"));
-
-                oneOf(siteMap).logout();
-                will(returnValue("logout"));
 
                 oneOf(request).getRequestURI();
                 will(returnValue("/"));
@@ -147,17 +73,12 @@ public class SecurityFilterTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(siteMap).loginPage();
-                will(returnValue("/login"));
-
-                oneOf(siteMap).registrationPage();
-                will(returnValue("/registration"));
-
-                oneOf(siteMap).logout();
-                will(returnValue("logout"));
 
                 oneOf(request).getRequestURI();
                 will(returnValue("/"));
+
+                oneOf(siteMap).loginPage();
+                will(returnValue("/login"));
 
                 oneOf(response).sendRedirect("/login");
             }

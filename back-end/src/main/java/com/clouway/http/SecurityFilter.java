@@ -42,11 +42,6 @@ public class SecurityFilter implements Filter {
 
         String uri = request.getRequestURI();
 
-        if(uri.contains(siteMap.loginPage()) || uri.contains(siteMap.registrationPage()) || uri.contains(siteMap.logout())) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         Session session = sessionProvider.get();
 
         Date currentTime = new Timestamp(System.currentTimeMillis());
@@ -57,7 +52,7 @@ public class SecurityFilter implements Filter {
                 response.setStatus(401);
                 return;
             }
-            response.sendRedirect("/login");
+            response.sendRedirect(siteMap.loginPage());
             return;
         }
         filterChain.doFilter(request, response);
