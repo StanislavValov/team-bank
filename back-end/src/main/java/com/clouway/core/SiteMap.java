@@ -11,9 +11,11 @@ public interface SiteMap {
 
     String index();
 
-    String registrationError();
-
     String loginFailed();
 
     String transactionError();
+
+    String dataMissmatch();
+
+    String occupiedUsername();
 }

@@ -35,8 +35,9 @@
 </head>
 <body>
 <div>
-    <div class="navbar navbar-default">
-        <div class="collapse navbar-collapse" collapse="menuCollapsed">
+
+    <nav class="navbar navbar-default">
+        <div align="center" class="container-fluid" collapse="menuCollapsed">
             <ul class="nav navbar-nav">
                 <li ui-sref-active="active">
                     <a href ui-sref="transaction">
@@ -52,10 +53,9 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </nav>
+    <div class="row-fluid" ui-view="main"></div>
 </div>
-
-<div class="input-group" ui-view="main"></div>
 
 </body>
 </html>

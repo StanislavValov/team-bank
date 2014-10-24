@@ -128,9 +128,9 @@ describe('Transaction module', function () {
 
     });
 
-    describe("authorizationInterceptor", function () {
+    describe("interceptor", function () {
 
-        var $q, windowService, authorizationInterceptor;
+        var $q, windowService, interceptor;
 
         beforeEach(function () {
 
@@ -144,14 +144,14 @@ describe('Transaction module', function () {
             });
 
             inject(function ($injector) {
-                authorizationInterceptor = $injector.get('authorizationInterceptor');
+                interceptor = $injector.get('interceptor');
             });
 
         });
 
         it('should redirect to "/login"', function () {
 
-            authorizationInterceptor.responseError({status: 401});
+            interceptor.responseError({status: 401});
 
             expect($q.reject).toHaveBeenCalledWith({status: 401});
 
@@ -161,13 +161,14 @@ describe('Transaction module', function () {
 
         it('should not redirect', function () {
 
-            authorizationInterceptor.responseError({status: 404});
+            interceptor.responseError({status: 404});
 
             expect($q.reject).toHaveBeenCalledWith({status: 404});
 
             expect(windowService.redirect).not.toHaveBeenCalled();
 
         });
+
     });
 
     describe('windowService', function () {

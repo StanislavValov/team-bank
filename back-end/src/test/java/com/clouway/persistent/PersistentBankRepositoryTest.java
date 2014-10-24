@@ -34,7 +34,7 @@ public class PersistentBankRepositoryTest {
         }
 
         @Override
-        public String onFailuer() {
+        public String onFailure() {
             return "Failed";
         }
     };
@@ -101,7 +101,7 @@ public class PersistentBankRepositoryTest {
 
         pretendThat(clientName("Ivan"), amount(100d));
 
-        TransactionStatus info = persistentBankRepository.withdraw(BigDecimal.valueOf(200));
+        TransactionStatus info = persistentBankRepository.withdraw(BigDecimal.valueOf(101));
 
         assertThat(info.message, is("Failed"));
         assertThat(info.amount, is("100.0"));

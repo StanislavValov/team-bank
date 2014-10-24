@@ -57,11 +57,11 @@ public class BankService {
     @Post
     public Reply<?> withdraw(Request request) {
 
-        DTOAmount DTOAmount = request.read(DTOAmount.class).as(Json.class);
+        DTOAmount dtoAmount = request.read(DTOAmount.class).as(Json.class);
 
-        if (validator.isValid(DTOAmount)) {
-            TransactionStatus info = bankRepository.withdraw(new BigDecimal(DTOAmount.getAmount()));
-            return Reply.with(info).as(Json.class);
+        if (validator.isValid(dtoAmount)) {
+            TransactionStatus status = bankRepository.withdraw(new BigDecimal(dtoAmount.getAmount()));
+            return Reply.with(status).as(Json.class);
         }
         return Reply.with(siteMap.transactionError()).error();
     }

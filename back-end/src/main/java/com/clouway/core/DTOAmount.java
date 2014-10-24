@@ -5,7 +5,7 @@ package com.clouway.core;
  */
 public class DTOAmount {
 
-    String amount;
+    private String amount;
 
     public DTOAmount() {
     }

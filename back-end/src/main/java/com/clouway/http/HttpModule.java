@@ -36,12 +36,12 @@ public class HttpModule extends ServletModule {
         return new TransactionMessages() {
             @Override
             public String onSuccess() {
-                return "Transaction onSuccess";
+                return "Successful transaction!";
             }
 
             @Override
-            public String onFailuer() {
-                return "Transaction onFailuer";
+            public String onFailure() {
+                return "Amount is more then Balance";
             }
         };
     }

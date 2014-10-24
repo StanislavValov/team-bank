@@ -3,14 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.clouway</groupId>
     <artifactId>bank-server</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <dependencies>
-
         <!--dependencies for testing-->
         <dependency>
             <groupId>junit</groupId>
@@ -18,7 +15,6 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock</artifactId>
@@ -35,84 +31,80 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
             <version>2.6.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <version>1.3</version>
             <scope>test</scope>
         </dependency>
-
         <!--server dependencies-->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-jsp</artifactId>
             <version>9.1.5.v20140505</version>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.jetty.aggregate</groupId>
             <artifactId>jetty-webapp</artifactId>
             <version>8.1.15.v20140411</version>
         </dependency>
-
         <!--sitebricks dependence-->
         <dependency>
             <groupId>com.google.sitebricks</groupId>
             <artifactId>sitebricks</artifactId>
             <version>0.8.8</version>
         </dependency>
-
         <!--guice dependencies-->
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>3.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-servlet</artifactId>
             <version>3.0</version>
         </dependency>
-
         <!--database dependence-->
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>2.12.2</version>
         </dependency>
-
         <!--logger dependence-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.7</version>
         </dependency>
-
         <!--guava dependence-->
         <dependency>
             <groupId>org.sonatype.sisu</groupId>
             <artifactId>sisu-guava</artifactId>
             <version>0.11.1</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>13.0</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
     </dependencies>
-
     <build>
         <finalName>team-bank</finalName>
         <pluginManagement>
@@ -126,25 +118,103 @@
                         <compilerArgument></compilerArgument>
                     </configuration>
                 </plugin>
-
-                <plugin>
-                    <!-- Build an executable JAR -->
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.5</version>
-                    <configuration>
-                        <archive>
-                            <manifest>
-                                <addClasspath>true</addClasspath>
-                                <mainClass>com.clouway.http.JettyServer</mainClass>
-                            </manifest>
-                        </archive>
-                    </configuration>
-                </plugin>
-
             </plugins>
         </pluginManagement>
-
+        <plugins>
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.clouway.http.JettyServer</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>jarjar-maven-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jarjar</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>aopalliance:aopalliance</include>
+                                <include>com.google.cod.findbugs:jsr305</include>
+                                <include>com.google.guava:guava</include>
+                                <include>com.google.inject.extensions:guice-multibindings</include>
+                                <include>com.google.inject.extensions:guice-servlet</include>
+                                <include>com.google.inject:guice</include>
+                                <include>com.google.sitebricks:sitebricks</include>
+                                <include>com.google.sitebricks:sitebricks-annotations</include>
+                                <include>com.google.sitebricks:sitebricks-client</include>
+                                <include>com.google.sitebricks:sitebricks-converter</include>
+                                <include>com.intellij:annotations</include>
+                                <include>com.ning:async-http-client</include>
+                                <include>com.thoughtworks.xstream:xstream</include>
+                                <include>javax.inject:javax.inject</include>
+                                <include>javax.servlet.jsp:javax.servlet.jsp-api</include>
+                                <include>javax.servlet:javax.servlet-api</include>
+                                <include>javax.servlet:servlet-api</include>
+                                <include>junit:junit</include>
+                                <include>junit:junit-dep</include>
+                                <include>net.jcip:jcip-annotations</include>
+                                <include>org.codehaus.jackson:jackson-core-asl</include>
+                                <include>org.codehaus.jackson:jackson-mapper-asl</include>
+                                <include>org.eclipse.jetty.aggregate:jetty-webapp</include>
+                                <include>org.eclipse.jetty.orbit:javax.servlet.jsp.jstl</include>
+                                <include>org.eclipse.jetty.orbit:javax.servlet</include>
+                                <include>org.eclipse.jetty.orbit:org.eclipse.jdt.core</include>
+                                <include>org.eclipse.jetty.toolchain:jetty-schemas</include>
+                                <include>org.eclipse.jetty:jetty-jsp</include>
+                                <include>org.glassfish.web:javax.servlet.jsp.jstl</include>
+                                <include>org.glassfish.web:javax.servlet.jsp</include>
+                                <include>org.glassfish:javax.el</include>
+                                <include>org.hamcrest:hamcrest-all</include>
+                                <include>org.hamcrest:hamcrest-core</include>
+                                <include>org.jboss.netty:netty</include>
+                                <include>org.jmock:jmock</include>
+                                <include>org.jmock:jmock-junit</include>
+                                <include>org.jsoup:jsoup</include>
+                                <include>org.mongodb:mongo-java-driver</include>
+                                <include>org.mvel:mvel2</include>
+                                <include>org.slf4j:slf4j-api</include>
+                                <include>org.slf4j:slf4j-simple</include>
+                                <include>org.sonatype.sisu:sisu-guava</include>
+                                <include>xpp3:xpp3_min</include>
+                            </includes>
+                            <rules>
+                                <rule>
+                                    <pattern>org.objectweb.asm.**</pattern>
+                                    <result>com.google.inject.internal.asm.@1</result>
+                                </rule>
+                                <rule>
+                                    <pattern>net.sf.cglib.**</pattern>
+                                    <result>com.google.inject.internal.cglib.@1</result>
+                                </rule>
+                                <keep>
+                                    <pattern>com.clouway.**</pattern>
+                                </keep>
+                                <keep>
+                                    <pattern>ch.qos.logback.core.rolling.**</pattern>
+                                </keep>
+                                <keep>
+                                    <pattern>ch.qos.logback.classic.net.**</pattern>
+                                </keep>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
-
 </project>

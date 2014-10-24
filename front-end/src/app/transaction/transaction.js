@@ -12,18 +12,18 @@ angular.module('transaction', ['ui.router'])
             data: {pageTitle: 'Transaction'}
         });
 
-        $httpProvider.interceptors.push('authorizationInterceptor');
+        $httpProvider.interceptors.push('interceptor');
     }])
 
-    .service('requestService', ['$http', '$q', function($http, $q) {
+    .service('requestService', ['$http', '$q', function ($http, $q) {
 
         return {
 
-            sendRequest: function(method, url, config) {
+            sendRequest: function (method, url, config) {
 
                 var defer = $q.defer();
 
-                $http({method: method, url: url, data: config}).success(function(data) {
+                $http({method: method, url: url, data: config}).success(function (data) {
                     defer.resolve(data);
                 });
 
@@ -52,7 +52,7 @@ angular.module('transaction', ['ui.router'])
 
     }])
 
-    .service('authorizationInterceptor', ['$q', 'windowService', function ($q, windowService) {
+    .service('interceptor', ['$q', 'windowService', '$rootScope', function ($q, windowService, $rootScope) {
 
         return {
             'responseError': function (rejection) {
@@ -60,9 +60,14 @@ angular.module('transaction', ['ui.router'])
                     windowService.redirect();
                 }
 
-                return $q.reject(rejection);
-            }
+                $rootScope.$emit("error", rejection.data);
 
+                return $q.reject(rejection);
+            },
+            'response': function (response) {
+                $rootScope.$emit("status", response.data.message);
+                return  $q.when(response);
+            }
         };
 
     }])
@@ -70,7 +75,7 @@ angular.module('transaction', ['ui.router'])
     .service('windowService', ['$window', function ($window) {
         return {
             redirect: function () {
-                $window.location.href ="/login";
+                $window.location.href = "/login";
             }
         };
     }])
@@ -102,5 +107,19 @@ angular.module('transaction', ['ui.router'])
         };
     }])
 
+    .controller('NotificationCtrl', ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
+        $rootScope.$on('error', function (event, message) {
+            $scope.message = message;
+            clear();
+        });
+        $rootScope.$on('status', function (event, message) {
+           $scope.message = message;
+           clear();
+        });
 
-;
+        function clear() {
+            $timeout(function () {
+                $scope.message = "";
+            }, 2000);
+        }
+    }]);

@@ -1,11 +1,12 @@
-<div ng-controller="TransactionCtrl" align="center" class="container">
+<div ng-controller="TransactionCtrl" align="center">
     <form class="css-form">
         <div class="btn-group btn-group-md">
+            <span style="color: #3333ff" ng-controller="NotificationCtrl">{{message}}</span>
+            <br/>
             <div>Balance:</div>
 
-
             <div>{{currentAmount}} $</div>
-            <div class="input-group">
+            <div>
                 <form name="myform" ng-submit="create()">
                     <input name="price_field"
                            class="form-control"
@@ -13,8 +14,10 @@
                            ng-model="amount"
                            require
                            ng-pattern="/^[1-9][0-9]*(\.[0-9]{1,2})?$/">
-                    <div>
 
+                    <p></p>
+
+                    <div>
                         <div>
                             <button id="deposit" class="btn btn-primary btn-xs" type="button" ng-click="deposit(amount)"
                                     >Deposit
@@ -28,5 +31,6 @@
                     </div>
                 </form>
             </div>
+        </div>
     </form>
 </div>

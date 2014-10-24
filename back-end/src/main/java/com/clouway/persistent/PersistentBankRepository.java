@@ -52,7 +52,7 @@ public class PersistentBankRepository implements BankRepository {
 
     /**
      * Withdraw amount from client account.If amount who withdraw is greater than current amount
-     * transaction is onFailuer.
+     * transaction is amountValidationError.
      *
      * @param amount amount who withdraw from account
      * @return info object for transaction and new current amount on the client.
@@ -63,7 +63,7 @@ public class PersistentBankRepository implements BankRepository {
         BigDecimal currentAmount = new BigDecimal(getBalance());
 
         if (amount.compareTo(currentAmount) > 0) {
-            return new TransactionStatus(transactionMessages.onFailuer(), currentAmount.toString());
+            return new TransactionStatus(transactionMessages.onFailure(), currentAmount.toString());
         }
 
         DBObject query = new BasicDBObject("name", currentUser.get().name);

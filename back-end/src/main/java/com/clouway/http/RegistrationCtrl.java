@@ -37,14 +37,16 @@ public class RegistrationCtrl {
     @Post
     public String register() {
 
-        if (validator.isValid(dtoUser) &&
-                !repository.findByName(dtoUser.getUsername()).isPresent()) {
-
-            repository.add(dtoUser);
-            return siteMap.loginPage();
+        if (!validator.isValid(dtoUser)){
+            error = siteMap.dataMissmatch();
+            return null;
         }
-        error = siteMap.registrationError();
-        return null;
+        if (repository.findByName(dtoUser.getUsername()).isPresent()){
+            error = siteMap.occupiedUsername();
+            return null;
+        }
+        repository.add(dtoUser);
+        return siteMap.loginPage();
     }
 
     @Get

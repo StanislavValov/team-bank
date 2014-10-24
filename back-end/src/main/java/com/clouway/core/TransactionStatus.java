@@ -1,7 +1,5 @@
 package com.clouway.core;
 
-import java.math.BigDecimal;
-
 /**
  * Created by emil on 14-9-25.
  */
@@ -20,10 +18,10 @@ public class TransactionStatus {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TransactionStatus that = (TransactionStatus) o;
+        TransactionStatus status = (TransactionStatus) o;
 
-        if (amount != null ? !amount.equals(that.amount) : that.amount != null) return false;
-        if (message != null ? !message.equals(that.message) : that.message != null) return false;
+        if (amount != null ? !amount.equals(status.amount) : status.amount != null) return false;
+        if (message != null ? !message.equals(status.message) : status.message != null) return false;
 
         return true;
     }

@@ -20,11 +20,6 @@ public class LabelMap implements SiteMap {
     }
 
     @Override
-    public String registrationError() {
-        return "Registration Failed";
-    }
-
-    @Override
     public String loginFailed() {
         return "Login Failed";
     }
@@ -32,5 +27,15 @@ public class LabelMap implements SiteMap {
     @Override
     public String transactionError() {
         return "Transaction error";
+    }
+
+    @Override
+    public String dataMissmatch() {
+        return "Data is not correct";
+    }
+
+    @Override
+    public String occupiedUsername() {
+        return "Username is occupied";
     }
 }

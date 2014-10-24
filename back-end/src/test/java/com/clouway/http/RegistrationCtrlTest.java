@@ -74,7 +74,7 @@ public class RegistrationCtrlTest {
                 oneOf(repository).findByName(null);
                 will(returnValue(optional));
 
-                oneOf(siteMap).registrationError();
+                oneOf(siteMap).occupiedUsername();
             }
         });
         assertThat(registrationCtrl.register(), nullValue());
@@ -90,7 +90,7 @@ public class RegistrationCtrlTest {
                 oneOf(validator).isValid(dtoUser);
                 will(returnValue(false));
 
-                oneOf(siteMap).registrationError();
+                oneOf(siteMap).dataMissmatch();
             }
         });
         assertThat(registrationCtrl.register(), nullValue());

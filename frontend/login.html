@@ -11,11 +11,13 @@
 @ShowIf(error!=null)
 <div align="center" style="color: #ff0000">${error}</div>
 <p></p>
-<div class="container-fluid" align="center">
+
+<div class="container" align="center">
     <div>
         <form class="form-horizontal" role="form" action="/login" method="post">
             <div class="form-group" style="width: 50%">
                 <label for="inputUserName" class="col-md-2 control-label"></label>
+
                 <div class="input-group">
                     <input type="text" class="form-control" id="inputUserName" placeholder="Username"
                            name="dtoUser.username">
@@ -24,6 +26,7 @@
             </div>
             <div class="form-group" style="width: 50%">
                 <label for="inputPassword" class="col-md-2 control-label"></label>
+
                 <div class="input-group">
                     <input type="password" class="form-control" id="inputPassword" placeholder="Password"
                            name="dtoUser.password">
@@ -35,8 +38,8 @@
                     <div class="col-md-6 col-md-offset-1">
                         <button type="submit" class="btn btn-primary btn3d" id="login">Sign in</button>
                     </div>
-                    <div class="col-md-1 col-md-offset-1"><a href="/registration"
-                                                             class="btn btn-default btn3d">Registration</a>
+                    <div class="col-md-4"><a href="/registration"
+                                             class="btn btn-default btn3d">Registration</a>
                     </div>
                 </div>
             </div>

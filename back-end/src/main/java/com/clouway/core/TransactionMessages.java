@@ -7,5 +7,5 @@ public interface TransactionMessages {
 
     String onSuccess();
 
-    String onFailuer();
+    String onFailure();
 }
