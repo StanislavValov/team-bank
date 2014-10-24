@@ -35,14 +35,14 @@ public class PersistentSessionRepositoryTest {
         session = new Session("username", "sessionid", new Date());
 
         DTOUser = new DTOUser();
-        
+
         db = mongoClient.getDB("team-bank-test");
 
         Clock clock = new Clock() {
             @Override
             public Date sessionExpirationTime(Calendar calendar) {
 
-                calendar.set(Calendar.FEBRUARY,3,3,3,0,0);
+                calendar.set(Calendar.FEBRUARY, 3, 3, 3, 0, 0);
                 return calendar.getTime();
             }
 
@@ -52,7 +52,7 @@ public class PersistentSessionRepositoryTest {
             }
         };
 
-        persistentSessionRepository = new PersistentSessionRepository(Providers.of(db),clock);
+        persistentSessionRepository = new PersistentSessionRepository(Providers.of(db), clock);
 
         sessions().drop();
     }
@@ -65,22 +65,22 @@ public class PersistentSessionRepositoryTest {
 
     @Test
     public void removeUserSession() {
-        persistentSessionRepository.addUser(DTOUser.getUsername(),session.getSessionId());
+        persistentSessionRepository.addUser(DTOUser.getUsername(), session.getSessionId());
         persistentSessionRepository.remove(session.getSessionId());
         assertThat(db.getCollection("sessions").findOne(), nullValue());
     }
 
     @Test
     public void findWillReturnCorrectSessionObject() {
-        persistentSessionRepository.addUser(DTOUser.getUsername(),session.getSessionId());
-        Optional<Session>sessionOptional = Optional.fromNullable(session);
+        persistentSessionRepository.addUser(DTOUser.getUsername(), session.getSessionId());
+        Optional<Session> sessionOptional = Optional.fromNullable(session);
         assertThat(persistentSessionRepository.find(session.getSessionId()), is(sessionOptional));
     }
 
     @Test
     public void findWillReturnAbsentValueWhenSessionIsEmpty() {
-        Optional<Session>absentValue = Optional.absent();
-        assertThat(persistentSessionRepository.find("notExistingId"),is(absentValue));
+        Optional<Session> absentValue = Optional.absent();
+        assertThat(persistentSessionRepository.find("notExistingId"), is(absentValue));
     }
 
     private DBCollection sessions() {

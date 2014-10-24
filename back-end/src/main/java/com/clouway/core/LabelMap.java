@@ -38,4 +38,14 @@ public class LabelMap implements SiteMap {
     public String occupiedUsername() {
         return "Username is occupied";
     }
+
+    @Override
+    public String registrationPage() {
+        return "/registration";
+    }
+
+    @Override
+    public String logout() {
+        return "logout";
+    }
 }

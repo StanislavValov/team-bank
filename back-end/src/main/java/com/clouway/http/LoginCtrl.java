@@ -46,13 +46,13 @@ public class LoginCtrl {
 
         if (!userRepository.find(dtoUser).isPresent()) {
             error = siteMap.loginFailed();
-            return null;
+            return "/login";
         }
 
         String sessionId = idGenerator.generateFor(dtoUser);
         sessionRepository.addUser(dtoUser.getUsername(), sessionId);
         response.addCookie(new Cookie(siteMap.sessionCookieName(), sessionId));
-        return siteMap.index();
+        return "/";
     }
 
     public DTOUser getDtoUser() {

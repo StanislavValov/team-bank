@@ -18,8 +18,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
-* Created by emil on 14-9-25.
-*/
+ * Created by emil on 14-9-25.
+ */
 public class PersistentBankRepositoryTest {
 
     private PersistentBankRepository persistentBankRepository;
@@ -34,7 +34,7 @@ public class PersistentBankRepositoryTest {
         }
 
         @Override
-        public String onFailure() {
+        public String onFailuer() {
             return "Failed";
         }
     };
@@ -49,13 +49,12 @@ public class PersistentBankRepositoryTest {
         currentUser = new CurrentUser("Ivan");
 
         persistentBankRepository = new PersistentBankRepository(Providers.of(db),
-                Providers.of(currentUser),transactionMessages);
+                Providers.of(currentUser), transactionMessages);
 
         bankUtil = new BankUtil(db);
 
         bankAccounts().drop();
     }
-
 
 
     @Test
@@ -66,7 +65,7 @@ public class PersistentBankRepositoryTest {
         TransactionStatus info = persistentBankRepository.deposit(BigDecimal.valueOf(20));
 
         assertThat(info.message, is("Success"));
-        assertThat(info.amount,is("120.0"));
+        assertThat(info.amount, is("120.0"));
 
     }
 
@@ -101,7 +100,7 @@ public class PersistentBankRepositoryTest {
 
         pretendThat(clientName("Ivan"), amount(100d));
 
-        TransactionStatus info = persistentBankRepository.withdraw(BigDecimal.valueOf(101));
+        TransactionStatus info = persistentBankRepository.withdraw(BigDecimal.valueOf(200));
 
         assertThat(info.message, is("Failed"));
         assertThat(info.amount, is("100.0"));

@@ -13,14 +13,19 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Created by emil on 14-9-26.
+ * @author Emil Georgiev <emogeorgiev88@gmail.com>.
  */
+@SuppressWarnings("deprecation")
 public class JettyServer {
 
-    public static void main(String[] args) {
-        final Map<String, String> configuration = loadConfituration(args);
+    public static void main(String[] args) throws Exception {
 
-        Module[] modules = new Module[]{new HttpModule(), new Sitebricks(), new PersistentModule(),
+        final Map<String, String> configuration = loadConfiguration(args);
+
+        Module[] modules = new Module[]{
+
+                new HttpModule(), new Sitebricks(), new PersistentModule(),
+
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -29,20 +34,23 @@ public class JettyServer {
                 }
         };
         Injector injector = Guice.createInjector(Stage.PRODUCTION, modules);
-        HttpBackend server = injector.getInstance(HttpBackend.class);
-        server.startServer();
+        HttpBackend jettyServer = injector.getInstance(HttpBackend.class);
+        jettyServer.startServer();
     }
 
-    private static Map<String, String> loadConfituration(String[] args) {
+    private static Map<String, String> loadConfiguration(String[] args) {
+
         Properties configuration = new Properties();
-        String confFile = "configuration.properties";
-        if (args.length != 0) {
-            confFile = args[0];
+        String configurationFile = "back-end/configuration.properties";
+
+        if (args.length > 0) {
+            configurationFile = args[0];
         }
 
+
         try {
-            InputStream inputStream = new FileInputStream(new File(confFile));
-            configuration.load(inputStream);
+            InputStream input = new FileInputStream(new File(configurationFile));
+            configuration.load(input);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,6 +60,7 @@ public class JettyServer {
             String value = configuration.getProperty(key);
             config.put(key, value);
         }
+
         return config;
     }
 }

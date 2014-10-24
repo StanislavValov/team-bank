@@ -3,26 +3,20 @@
     <link rel="stylesheet" href="registration.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-
     <meta http-equiv="Cache-control" content="No-cache">
-
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
     <title>BankRegistration</title>
 </head>
 <h1 align="center">
     <small>Registration</small>
 </h1>
 <body style="background-color: powderblue">
-
 <div class="container" align="center">
     <p></p>
-
     <div>
         @ShowIf(error!=null)
         <p style="color: #ff0000">${error}</p>
     </div>
-
     <form class="col-md-12 go-right" role="form" action="/registration" method="post">
         <div class="form-group" style="width: 50%">
             <div class="input-group">
@@ -40,7 +34,6 @@
                 <span class="input-group-addon glyphicon glyphicon-lock"></span>
             </div>
         </div>
-
         <div class="row" style="width: 80%">
             <div>
                 <div class="col-md-1 col-md-offset-2">
@@ -55,6 +48,5 @@
     </form>
     <p></p>
 </div>
-
 </body>
 </html>

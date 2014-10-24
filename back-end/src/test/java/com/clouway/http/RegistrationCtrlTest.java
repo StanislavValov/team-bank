@@ -14,46 +14,35 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
 /**
-* Created by clouway on 14-10-2.
-*/
+ * Created by clouway on 14-10-2.
+ */
 public class RegistrationCtrlTest {
-
     private RegistrationCtrl registrationCtrl;
     private DTOUser dtoUser = new DTOUser();
-
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
-
     @Mock
     UserRepository repository;
-
     @Mock
     Validator validator;
-
     @Mock
     SiteMap siteMap;
 
     @Before
     public void setUp() {
-
         registrationCtrl = new RegistrationCtrl(validator, repository, siteMap);
     }
 
     @Test
     public void createAccount() {
-
         final Optional<User> optional = Optional.absent();
-
         context.checking(new Expectations() {
             {
                 oneOf(validator).isValid(dtoUser);
                 will(returnValue(true));
-
                 oneOf(repository).findByName(null);
                 will(returnValue(optional));
-
                 oneOf(repository).add(dtoUser);
-
                 oneOf(siteMap).loginPage();
                 will(returnValue("/login"));
             }
@@ -63,17 +52,13 @@ public class RegistrationCtrlTest {
 
     @Test
     public void userAlreadyExists() {
-
-        final Optional<User> optional = Optional.fromNullable(new User("name","pass"));
-
+        final Optional<User> optional = Optional.fromNullable(new User("name", "pass"));
         context.checking(new Expectations() {
             {
                 oneOf(validator).isValid(dtoUser);
                 will(returnValue(true));
-
                 oneOf(repository).findByName(null);
                 will(returnValue(optional));
-
                 oneOf(siteMap).occupiedUsername();
             }
         });
@@ -82,19 +67,14 @@ public class RegistrationCtrlTest {
 
     @Test
     public void userDataAreNotCorrect() {
-
         final Optional<User> optional = Optional.absent();
-
         context.checking(new Expectations() {
             {
                 oneOf(validator).isValid(dtoUser);
                 will(returnValue(false));
-
                 oneOf(siteMap).dataMissmatch();
             }
         });
         assertThat(registrationCtrl.register(), nullValue());
     }
-
-
 }

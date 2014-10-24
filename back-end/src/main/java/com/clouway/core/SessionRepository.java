@@ -2,8 +2,6 @@ package com.clouway.core;
 
 import com.google.common.base.Optional;
 
-import java.util.Date;
-
 /**
  * Created by emil on 14-9-27.
  */

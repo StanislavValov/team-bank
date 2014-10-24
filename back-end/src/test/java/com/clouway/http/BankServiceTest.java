@@ -53,7 +53,7 @@ public class BankServiceTest {
 
         fakeRequestReader = new FakeRequestReader(dtoAmount);
 
-        transactionStatus = new TransactionStatus(message("Success"),"100");
+        transactionStatus = new TransactionStatus(message("Success"), "100");
 
     }
 

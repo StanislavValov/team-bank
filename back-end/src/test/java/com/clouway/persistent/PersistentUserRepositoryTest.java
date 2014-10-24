@@ -20,7 +20,7 @@ public class PersistentUserRepositoryTest {
     private PersistentUserRepository persistentUserRepository;
     private DB db;
     private DTOUser DTOUser;
-    
+
     private UserUtil userUtil;
 
     @Before
@@ -64,7 +64,7 @@ public class PersistentUserRepositoryTest {
         return db.getCollection("users");
     }
 
-    private DBCollection accounts(){
+    private DBCollection accounts() {
         return db.getCollection("bank_accounts");
     }
 

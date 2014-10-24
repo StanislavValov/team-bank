@@ -18,4 +18,8 @@ public interface SiteMap {
     String dataMissmatch();
 
     String occupiedUsername();
+
+    String registrationPage();
+
+    String logout();
 }

@@ -22,9 +22,12 @@ public class PersistentModule extends AbstractModule {
     }
 
     @Provides
-    public DB getDBProvider(@Named("dbHost")String host, @Named("dbPort")Integer port, @Named("dbName")String name) throws UnknownHostException {
-        MongoClient mongoClient = new MongoClient(host,port);
+    public DB getDBProvider(@Named("db.host") String dbHost,
+                            @Named("db.port") Integer dbPort,
+                            @Named("db.name") String dbName) throws UnknownHostException {
 
-        return mongoClient.getDB(name);
+        MongoClient mongoClient = new MongoClient(dbHost, dbPort);
+
+        return mongoClient.getDB(dbName);
     }
 }

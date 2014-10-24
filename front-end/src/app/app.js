@@ -1,3 +1,6 @@
+/**
+ * Created by emil on 14-10-21.
+ */
 angular.module('team-bank', [
     'templates-app',
     'templates-common',

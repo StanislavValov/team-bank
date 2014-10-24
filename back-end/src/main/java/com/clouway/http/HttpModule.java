@@ -3,7 +3,8 @@ package com.clouway.http;
 import com.clouway.core.*;
 import com.clouway.persistent.PersistentBankRepository;
 import com.google.common.base.Optional;
-import com.google.inject.*;
+import com.google.inject.Provider;
+import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
@@ -19,8 +20,7 @@ public class HttpModule extends ServletModule {
     @Override
     protected void configureServlets() {
 
-        filter("/amount/*").through(SecurityFilter.class);
-        filter("/amount").through(SecurityFilter.class);
+        filterRegex("^(?!.*(.)*login|(.)*registration|(.)*logout).*").through(SecurityFilter.class);
 
         bind(BankRepository.class).to(PersistentBankRepository.class);
         bind(IdGenerator.class).to(SessionIdGenerator.class);
@@ -40,7 +40,7 @@ public class HttpModule extends ServletModule {
             }
 
             @Override
-            public String onFailure() {
+            public String onFailuer() {
                 return "Amount is more then Balance";
             }
         };

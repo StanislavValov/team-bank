@@ -1,7 +1,7 @@
 package com.clouway.http;
 
 import com.clouway.core.Session;
-import com.google.common.base.Optional;
+import com.clouway.core.SiteMap;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -9,7 +9,6 @@ import com.google.inject.Singleton;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -21,11 +20,13 @@ import java.util.Date;
 public class SecurityFilter implements Filter {
 
     private final Provider<Session> sessionProvider;
+    private final SiteMap siteMap;
 
     @Inject
-    public SecurityFilter(Provider<Session> sessionProvider) {
+    public SecurityFilter(Provider<Session> sessionProvider, SiteMap siteMap) {
 
         this.sessionProvider = sessionProvider;
+        this.siteMap = siteMap;
     }
 
     @Override
@@ -39,12 +40,19 @@ public class SecurityFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
+        String uri = request.getRequestURI();
+
         Session session = sessionProvider.get();
 
         Date currentTime = new Timestamp(System.currentTimeMillis());
 
         if (session == null || session.getExpirationTime().before(currentTime)) {
-            response.setStatus(401);
+            if (uri.contains("amount")) {
+
+                response.setStatus(401);
+                return;
+            }
+            response.sendRedirect(siteMap.loginPage());
             return;
         }
         filterChain.doFilter(request, response);

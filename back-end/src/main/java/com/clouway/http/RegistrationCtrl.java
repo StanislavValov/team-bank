@@ -1,7 +1,7 @@
 package com.clouway.http;
 
-import com.clouway.core.SiteMap;
 import com.clouway.core.DTOUser;
+import com.clouway.core.SiteMap;
 import com.clouway.core.UserRepository;
 import com.clouway.core.Validator;
 import com.google.inject.Inject;
@@ -37,11 +37,11 @@ public class RegistrationCtrl {
     @Post
     public String register() {
 
-        if (!validator.isValid(dtoUser)){
+        if (!validator.isValid(dtoUser)) {
             error = siteMap.dataMissmatch();
             return null;
         }
-        if (repository.findByName(dtoUser.getUsername()).isPresent()){
+        if (repository.findByName(dtoUser.getUsername()).isPresent()) {
             error = siteMap.occupiedUsername();
             return null;
         }

@@ -18,10 +18,10 @@ public class TransactionStatus {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TransactionStatus status = (TransactionStatus) o;
+        TransactionStatus that = (TransactionStatus) o;
 
-        if (amount != null ? !amount.equals(status.amount) : status.amount != null) return false;
-        if (message != null ? !message.equals(status.message) : status.message != null) return false;
+        if (amount != null ? !amount.equals(that.amount) : that.amount != null) return false;
+        if (message != null ? !message.equals(that.message) : that.message != null) return false;
 
         return true;
     }

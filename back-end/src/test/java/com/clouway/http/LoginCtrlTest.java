@@ -19,8 +19,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 
 /**
-* Created by clouway on 14-9-24.
-*/
+ * Created by clouway on 14-9-24.
+ */
 public class LoginCtrlTest {
 
     @Rule
@@ -43,12 +43,12 @@ public class LoginCtrlTest {
     SiteMap siteMap;
 
     @Before
-    public void setUp(){
+    public void setUp() {
 
         dtoUser = new DTOUser();
         loginCtrl = new LoginCtrl(userRepository, sessionRepository, idGenerator, siteMap);
 
-        response = new FakeHttpResponse(){
+        response = new FakeHttpResponse() {
             @Override
             public void addCookie(Cookie cookie) {
                 super.addCookie(cookie);
@@ -60,7 +60,7 @@ public class LoginCtrlTest {
     @Test
     public void authenticate() throws ServletException, IOException {
 
-        context.checking(new Expectations(){
+        context.checking(new Expectations() {
             {
                 oneOf(userRepository).find(dtoUser);
                 will(returnValue(Optional.of(dtoUser)));
@@ -68,22 +68,19 @@ public class LoginCtrlTest {
                 oneOf(idGenerator).generateFor(dtoUser);
                 will(returnValue("sessionId"));
 
-                oneOf(siteMap).index();
-                will(returnValue("index.html"));
-
                 oneOf(siteMap).sessionCookieName();
                 will(returnValue("sId"));
 
                 oneOf(sessionRepository).addUser(dtoUser.getUsername(), "sessionId");
             }
         });
-        assertThat(loginCtrl.authenticate(response), is("index.html"));
+        assertThat(loginCtrl.authenticate(response), is("/"));
     }
 
     @Test
     public void loginFailed() throws ServletException, IOException {
 
-        context.checking(new Expectations(){
+        context.checking(new Expectations() {
             {
                 oneOf(userRepository).find(dtoUser);
                 will(returnValue(Optional.absent()));
@@ -92,6 +89,6 @@ public class LoginCtrlTest {
                 will(returnValue("Error"));
             }
         });
-        assertThat(loginCtrl.authenticate(response), nullValue());
+        assertThat(loginCtrl.authenticate(response), is("/login"));
     }
 }
