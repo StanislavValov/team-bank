@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 
 import static com.clouway.custommatcher.ReplyMatcher.contains;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 /**
  * Created by emil on 14-9-24.
@@ -25,8 +24,8 @@ public class BankServiceTest {
     private BankService bankService;
     private FakeRequestReader fakeRequestReader;
     private TransactionStatus transactionStatus;
-    private Amount amount = new Amount();
     private DTOAmount dtoAmount = new DTOAmount();
+    private Amount amount;
 
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
@@ -45,25 +44,19 @@ public class BankServiceTest {
 
     @Before
     public void setUp() {
-
         CurrentUser currentUser = new CurrentUser("Ivan");
-
         bankService = new BankService(bankRepository, validator, siteMap);
-
-        amount.setAmount("123");
-
         dtoAmount.setAmount("123");
-
+        amount = new Amount(dtoAmount.getAmount());
         fakeRequestReader = new FakeRequestReader(dtoAmount);
-
         transactionStatus = new TransactionStatus(message("Success"), "100");
-
     }
 
     @Test
     public void depositAmount() {
 
         context.checking(new Expectations() {
+
             {
                 oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
@@ -71,15 +64,12 @@ public class BankServiceTest {
                 oneOf(validator).isValid(amount);
                 will(returnValue(true));
 
-                oneOf(bankRepository).deposit(new BigDecimal(amount.getAmount()));
+                oneOf(bankRepository).deposit(new BigDecimal(dtoAmount.getAmount()));
                 will(returnValue(transactionStatus));
             }
         });
-
         Reply<?> reply = bankService.deposit(request);
-
         assertThat(reply, contains(transactionStatus));
-
     }
 
     @Test
@@ -104,24 +94,20 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount() {
 
-        amount.setAmount("123");
-
         context.checking(new Expectations() {
             {
-
                 oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
                 oneOf(validator).isValid(amount);
                 will(returnValue(true));
 
+
                 oneOf(bankRepository).withdraw(new BigDecimal(amount.getAmount()));
                 will(returnValue(transactionStatus));
             }
         });
-
         Reply<?> reply = bankService.withdraw(request);
-
         assertThat(reply, contains(transactionStatus));
     }
 
@@ -133,16 +119,16 @@ public class BankServiceTest {
                 oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
+
                 oneOf(validator).isValid(amount);
                 will(returnValue(false));
+
 
                 oneOf(siteMap).transactionError();
                 will(returnValue("error"));
             }
         });
-
         Reply<?> reply = bankService.withdraw(request);
-
         assertThat(reply, contains("error"));
     }
 
@@ -151,16 +137,12 @@ public class BankServiceTest {
 
         context.checking(new Expectations() {
             {
-
                 oneOf(bankRepository).getBalance();
                 will(returnValue("5.1"));
             }
         });
-
         Reply<?> reply = bankService.getCurrentAmount();
-
         assertThat(reply, contains("5.1"));
-
     }
 
     private String message(String message) {
@@ -170,5 +152,4 @@ public class BankServiceTest {
     private BigDecimal amount(BigDecimal amount) {
         return amount;
     }
-
 }

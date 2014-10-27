@@ -21,37 +21,34 @@ public class PersistentUserRepository implements UserRepository {
 
     @Inject
     public PersistentUserRepository(Provider<DB> dbProvider) {
-
         this.db = dbProvider.get();
     }
 
     @Override
     public Optional<User> find(User user) {
 
-        BasicDBObject query = new BasicDBObject("username", user.getName());
-
-        query.append("password", user.getPassword());
-
-        BasicDBObject result = (BasicDBObject) users().findOne(query, query);
+        BasicDBObject query = new BasicDBObject("username", user.getName())
+                .append("password", user.getPassword());
+        BasicDBObject result = (BasicDBObject) users().findOne(query);
 
         if (!Optional.fromNullable(result).isPresent()) {
             return Optional.absent();
         }
 
-        return Optional.fromNullable(new User(result.getString("username")));
+        return Optional.fromNullable(new User(result.getString("username"), result.getString("password")));
     }
 
     @Override
     public Optional<User> findByName(String username) {
-        DBObject query = new BasicDBObject("username", username);
 
-        BasicDBObject result = (BasicDBObject) users().findOne(query, query);
+        DBObject query = new BasicDBObject("username", username);
+        BasicDBObject result = (BasicDBObject) users().findOne(query);
 
         if (!Optional.fromNullable(result).isPresent()) {
             return Optional.absent();
         }
 
-        return Optional.fromNullable(new User(result.getString("username")));
+        return Optional.fromNullable(new User(result.getString("username"), result.getString("password")));
     }
 
     @Override
@@ -71,10 +68,8 @@ public class PersistentUserRepository implements UserRepository {
     private void createAccount(String name) {
 
         BasicDBObject query = new BasicDBObject();
-
         query.append("name", name);
         query.append("amount", "0");
-
         db.getCollection("bank_accounts").insert(query);
     }
 }

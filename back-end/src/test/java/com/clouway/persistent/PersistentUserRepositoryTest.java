@@ -1,6 +1,5 @@
 package com.clouway.persistent;
 
-import com.clouway.core.DTOUser;
 import com.clouway.core.User;
 import com.clouway.persistent.util.UserUtil;
 import com.google.common.base.Optional;
@@ -21,44 +20,47 @@ public class PersistentUserRepositoryTest {
 
     private PersistentUserRepository persistentUserRepository;
     private DB db;
-    private User user;
-
     private UserUtil userUtil;
 
     @Before
     public void setUp() throws UnknownHostException {
+
         MongoClient mongoClient = new MongoClient();
-
         db = mongoClient.getDB("team-bank-test");
-
         persistentUserRepository = new PersistentUserRepository(Providers.of(db));
-
         userUtil = new UserUtil(db);
-
         users().drop();
         accounts().drop();
     }
 
     @Test
-    public void userIsNotAuthorised() {
-        user = new User("name","pass");
-        Optional<User>optional = Optional.absent();
-        assertThat(persistentUserRepository.find(user), is(optional));
-    }
+    public void findUserByName() throws Exception {
 
-    @Test
-    public void userIsAuthorised() {
-        user = new User("name","pass");
-        persistentUserRepository.add(user);
-        Optional<User>optional = Optional.fromNullable(user);
-        assertThat(persistentUserRepository.find(user), is(optional));
+        pretendThatHasUser(name("username"), password("password"));
+        Optional<User> optional = persistentUserRepository.findByName("username");
+        User user = optional.get();
+        assertThat(user.getName(), is("username"));
+        assertThat(user.getPassword(), is("password"));
     }
 
     @Test
     public void userBankAccountWasCreatedAfterRegistration() {
-        user = new User("name", "pass");
+
+        User user = new User("Ivan", "123456");
         persistentUserRepository.add(user);
         assertThat(accounts().findOne(), notNullValue());
+    }
+
+    private void pretendThatHasUser(String username, String password) {
+        userUtil.registerClient(username, password);
+    }
+
+    private String password(String password) {
+        return password;
+    }
+
+    private String name(String username) {
+        return username;
     }
 
     private DBCollection users() {
@@ -68,5 +70,4 @@ public class PersistentUserRepositoryTest {
     private DBCollection accounts() {
         return db.getCollection("bank_accounts");
     }
-
 }

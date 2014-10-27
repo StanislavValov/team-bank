@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
-
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,32 +21,27 @@ import static org.hamcrest.core.Is.is;
  * Created by clouway on 14-9-24.
  */
 public class LoginCtrlTest {
-
+    @Rule
+    public JUnitRuleMockery context = new JUnitRuleMockery();
     private User user;
     private LoginCtrl loginCtrl;
     private FakeHttpResponse response;
-
-    @Rule
-    public JUnitRuleMockery context = new JUnitRuleMockery();
-
     @Mock
     UserRepository userRepository;
-
     @Mock
     SessionRepository sessionRepository;
-
     @Mock
     IdGenerator idGenerator;
-
     @Mock
     SiteMap siteMap;
 
     @Before
     public void setUp() {
-
-        user = new User("name","password");
         loginCtrl = new LoginCtrl(userRepository, sessionRepository, idGenerator, siteMap);
-
+        DTOUser dtoUser = loginCtrl.getDtoUser();
+        dtoUser.setUsername("username");
+        dtoUser.setPassword("password");
+        user = new User("username", "password");
         response = new FakeHttpResponse() {
             @Override
             public void addCookie(Cookie cookie) {
@@ -56,10 +50,8 @@ public class LoginCtrlTest {
         };
     }
 
-
     @Test
     public void authenticate() throws ServletException, IOException {
-
         context.checking(new Expectations() {
             {
                 oneOf(userRepository).find(user);
@@ -68,11 +60,10 @@ public class LoginCtrlTest {
                 oneOf(idGenerator).generateFor(user);
                 will(returnValue("sessionId"));
 
-                oneOf(sessionRepository).addUser(user.getName(), "sessionId");
-
                 oneOf(siteMap).sessionCookieName();
                 will(returnValue("sId"));
 
+                oneOf(sessionRepository).addUser(user.getName(), "sessionId");
             }
         });
         assertThat(loginCtrl.authenticate(response), is("/"));
@@ -80,7 +71,6 @@ public class LoginCtrlTest {
 
     @Test
     public void loginFailed() throws ServletException, IOException {
-
         context.checking(new Expectations() {
             {
                 oneOf(userRepository).find(user);
@@ -90,6 +80,6 @@ public class LoginCtrlTest {
                 will(returnValue("Error"));
             }
         });
-        assertThat(loginCtrl.authenticate(response), is("/login"));
+        assertThat(loginCtrl.authenticate(response), nullValue());
     }
 }

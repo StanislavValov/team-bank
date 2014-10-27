@@ -1,6 +1,5 @@
 package com.clouway.http;
 
-import com.clouway.core.CalendarUtil;
 import com.clouway.core.Clock;
 import com.clouway.core.Session;
 import com.clouway.core.SiteMap;
@@ -17,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 
 public class SecurityFilterTest {

@@ -10,18 +10,16 @@ import com.mongodb.DBObject;
  */
 public class UserUtil {
 
-
     private final DB db;
 
     public UserUtil(DB db) {
-
         this.db = db;
     }
 
-    public void registerClient(String name, double amount) {
-        DBObject query = new BasicDBObject("name", name)
-                .append("amount", amount);
+    public void registerClient(String name, String password) {
 
+        DBObject query = new BasicDBObject("username", name)
+                .append("password", password);
         users().insert(query);
     }
 

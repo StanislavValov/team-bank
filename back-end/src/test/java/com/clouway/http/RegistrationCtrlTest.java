@@ -18,7 +18,8 @@ import static org.hamcrest.core.IsNull.nullValue;
  */
 public class RegistrationCtrlTest {
     private RegistrationCtrl registrationCtrl;
-    private User user = new User("name", "pass");
+    private DTOUser dtoUser = new DTOUser();
+    private User user;
 
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
@@ -35,6 +36,10 @@ public class RegistrationCtrlTest {
     @Before
     public void setUp() {
         registrationCtrl = new RegistrationCtrl(validator, repository, siteMap);
+        dtoUser = registrationCtrl.getDtoUser();
+        dtoUser.setUsername("username");
+        dtoUser.setPassword("password");
+        user = new User("username", "password");
     }
 
     @Test
@@ -47,7 +52,7 @@ public class RegistrationCtrlTest {
                 oneOf(validator).isValid(user);
                 will(returnValue(true));
 
-                oneOf(repository).findByName(null);
+                oneOf(repository).findByName("username");
                 will(returnValue(optional));
 
                 oneOf(repository).add(user);
@@ -68,8 +73,10 @@ public class RegistrationCtrlTest {
             {
                 oneOf(validator).isValid(user);
                 will(returnValue(true));
-                oneOf(repository).findByName(null);
+
+                oneOf(repository).findByName("username");
                 will(returnValue(optional));
+
                 oneOf(siteMap).occupiedUsername();
             }
         });
@@ -85,7 +92,7 @@ public class RegistrationCtrlTest {
             {
                 oneOf(validator).isValid(user);
                 will(returnValue(false));
-                
+
                 oneOf(siteMap).dataMissmatch();
             }
         });
