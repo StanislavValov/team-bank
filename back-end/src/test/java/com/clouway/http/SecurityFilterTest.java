@@ -1,6 +1,5 @@
 package com.clouway.http;
 
-import com.clouway.core.Clock;
 import com.clouway.core.Session;
 import com.clouway.core.SiteMap;
 import com.google.inject.util.Providers;
@@ -17,11 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SecurityFilterTest {
 
     private SecurityFilter securityFilter;
     private Session session;
+    private Set<String> uncheckedResources;
 
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
@@ -38,27 +40,43 @@ public class SecurityFilterTest {
     @Mock
     private SiteMap siteMap;
 
-    @Mock
-    private Clock clock;
-
     @Before
     public void setUp() {
-        securityFilter = new SecurityFilter(Providers.of(session), siteMap, clock);
+        securityFilter = new SecurityFilter(Providers.of(session), siteMap, Providers.of(uncheckedResources));
+    }
+
+    @Test
+    public void resourceMustNotBeSecured() throws IOException, ServletException {
+
+        uncheckedResources = new HashSet<>();
+        uncheckedResources.add("resource");
+
+        securityFilter = new SecurityFilter(Providers.of(session), siteMap, Providers.of(uncheckedResources));
+
+        context.checking(new Expectations(){
+            {
+                oneOf(request).getRequestURI();
+                will(returnValue("resource"));
+
+                oneOf(filterChain).doFilter(request,response);
+            }
+        });
+
+        securityFilter.doFilter(request,response,filterChain);
     }
 
     @Test
     public void sessionIsNotExpired() throws IOException, ServletException {
 
+        uncheckedResources = new HashSet<>();
+
         session = new Session("username", "sessionid", new Date(System.currentTimeMillis() + 1000));
 
-        securityFilter = new SecurityFilter(Providers.of(session), siteMap, clock);
+        securityFilter = new SecurityFilter(Providers.of(session), siteMap, Providers.of(uncheckedResources));
 
         context.checking(new Expectations() {
             {
                 oneOf(request).getRequestURI();
-
-                oneOf(clock).now();
-                will(returnValue(new Date()));
 
                 oneOf(filterChain).doFilter(request, response);
             }
@@ -72,24 +90,23 @@ public class SecurityFilterTest {
     @Test
     public void sessionIsExpired() throws IOException, ServletException {
 
+        uncheckedResources = new HashSet<>();
+
         session = new Session("username", "sessionid", new Date(System.currentTimeMillis() - 1000));
 
-        securityFilter = new SecurityFilter(Providers.of(session), siteMap, clock);
+        securityFilter = new SecurityFilter(Providers.of(session), siteMap, Providers.of(uncheckedResources));
 
         context.checking(new Expectations() {
             {
                 oneOf(request).getRequestURI();
                 will(returnValue("/"));
 
-                oneOf(clock).now();
-                will(returnValue(new Date()));
-
                 oneOf(siteMap).loginPage();
                 will(returnValue("/login"));
 
                 oneOf(response).sendRedirect("/login");
 
-                oneOf(filterChain).doFilter(request,response);
+                oneOf(filterChain).doFilter(request, response);
             }
         });
 
@@ -100,11 +117,13 @@ public class SecurityFilterTest {
     @Test
     public void tryToOpenAccountPageWithoutPermission() throws IOException, ServletException {
 
+        uncheckedResources = new HashSet<>();
+
         session = null;
 
-        securityFilter = new SecurityFilter(Providers.of(session),siteMap, clock);
+        securityFilter = new SecurityFilter(Providers.of(session), siteMap, Providers.of(uncheckedResources));
 
-        context.checking(new Expectations(){
+        context.checking(new Expectations() {
             {
                 oneOf(request).getRequestURI();
                 will(returnValue("/amount"));
@@ -112,15 +131,17 @@ public class SecurityFilterTest {
                 oneOf(response).setStatus(401);
             }
         });
-        securityFilter.doFilter(request,response,filterChain);
+        securityFilter.doFilter(request, response, filterChain);
     }
 
     @Test
     public void sessionIsNull() throws Exception {
 
+        uncheckedResources = new HashSet<>();
+
         session = null;
 
-        securityFilter = new SecurityFilter(Providers.of(session), siteMap, clock);
+        securityFilter = new SecurityFilter(Providers.of(session), siteMap, Providers.of(uncheckedResources));
 
         context.checking(new Expectations() {
             {
