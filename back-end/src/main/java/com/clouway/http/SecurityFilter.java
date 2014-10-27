@@ -1,5 +1,6 @@
 package com.clouway.http;
 
+import com.clouway.core.Clock;
 import com.clouway.core.Session;
 import com.clouway.core.SiteMap;
 import com.google.inject.Inject;
@@ -21,12 +22,14 @@ public class SecurityFilter implements Filter {
 
     private final Provider<Session> sessionProvider;
     private final SiteMap siteMap;
+    private final Clock clock;
 
     @Inject
-    public SecurityFilter(Provider<Session> sessionProvider, SiteMap siteMap) {
+    public SecurityFilter(Provider<Session> sessionProvider, SiteMap siteMap, Clock clock) {
 
         this.sessionProvider = sessionProvider;
         this.siteMap = siteMap;
+        this.clock = clock;
     }
 
     @Override
@@ -44,16 +47,14 @@ public class SecurityFilter implements Filter {
 
         Session session = sessionProvider.get();
 
-        Date currentTime = new Timestamp(System.currentTimeMillis());
+        if (session == null || session.getExpirationTime().before(clock.now())) {
 
-        if (session == null || session.getExpirationTime().before(currentTime)) {
             if (uri.contains("amount")) {
 
                 response.setStatus(401);
                 return;
             }
             response.sendRedirect(siteMap.loginPage());
-            return;
         }
         filterChain.doFilter(request, response);
     }

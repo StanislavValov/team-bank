@@ -15,7 +15,6 @@ import java.util.Properties;
 /**
  * @author Emil Georgiev <emogeorgiev88@gmail.com>.
  */
-@SuppressWarnings("deprecation")
 public class JettyServer {
 
     public static void main(String[] args) throws Exception {

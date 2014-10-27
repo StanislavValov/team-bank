@@ -1,6 +1,5 @@
 package com.clouway.persistent;
 
-import com.clouway.core.DTOUser;
 import com.clouway.core.User;
 import com.clouway.core.UserRepository;
 import com.google.common.base.Optional;
@@ -27,11 +26,11 @@ public class PersistentUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> find(DTOUser DTOUser) {
+    public Optional<User> find(User user) {
 
-        BasicDBObject query = new BasicDBObject("username", DTOUser.getUsername());
+        BasicDBObject query = new BasicDBObject("username", user.getName());
 
-        query.append("password", DTOUser.getPassword());
+        query.append("password", user.getPassword());
 
         BasicDBObject result = (BasicDBObject) users().findOne(query, query);
 
@@ -56,12 +55,12 @@ public class PersistentUserRepository implements UserRepository {
     }
 
     @Override
-    public void add(DTOUser DTOUser) {
+    public void add(User user) {
 
-        DBObject query = new BasicDBObject("username", DTOUser.getUsername()).
-                append("password", DTOUser.getPassword());
+        DBObject query = new BasicDBObject("username", user.getName()).
+                append("password", user.getPassword());
 
-        createAccount(DTOUser.getUsername());
+        createAccount(user.getName());
         users().insert(query);
     }
 

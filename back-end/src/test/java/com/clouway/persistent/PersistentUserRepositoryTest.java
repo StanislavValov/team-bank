@@ -1,7 +1,9 @@
 package com.clouway.persistent;
 
-import com.clouway.persistent.util.UserUtil;
 import com.clouway.core.DTOUser;
+import com.clouway.core.User;
+import com.clouway.persistent.util.UserUtil;
+import com.google.common.base.Optional;
 import com.google.inject.util.Providers;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -19,15 +21,13 @@ public class PersistentUserRepositoryTest {
 
     private PersistentUserRepository persistentUserRepository;
     private DB db;
-    private DTOUser DTOUser;
+    private User user;
 
     private UserUtil userUtil;
 
     @Before
     public void setUp() throws UnknownHostException {
         MongoClient mongoClient = new MongoClient();
-
-        DTOUser = new DTOUser();
 
         db = mongoClient.getDB("team-bank-test");
 
@@ -41,22 +41,23 @@ public class PersistentUserRepositoryTest {
 
     @Test
     public void userIsNotAuthorised() {
-//        assertThat(persistentUserRepository.findByName(DTOUser), is(false));
+        user = new User("name","pass");
+        Optional<User>optional = Optional.absent();
+        assertThat(persistentUserRepository.find(user), is(optional));
     }
 
     @Test
     public void userIsAuthorised() {
-        DTOUser.setUsername("Brahmaputra");
-        DTOUser.setPassword("123456");
-        persistentUserRepository.add(DTOUser);
-//        assertThat(persistentUserRepository.isAuthorised(DTOUser), is(true));
+        user = new User("name","pass");
+        persistentUserRepository.add(user);
+        Optional<User>optional = Optional.fromNullable(user);
+        assertThat(persistentUserRepository.find(user), is(optional));
     }
 
     @Test
     public void userBankAccountWasCreatedAfterRegistration() {
-        DTOUser.setUsername("Ivan");
-        DTOUser.setPassword("123456");
-        persistentUserRepository.add(DTOUser);
+        user = new User("name", "pass");
+        persistentUserRepository.add(user);
         assertThat(accounts().findOne(), notNullValue());
     }
 

@@ -1,5 +1,6 @@
 package com.clouway.http.fake;
 
+import com.clouway.core.Amount;
 import com.clouway.core.DTOAmount;
 
 import static com.google.sitebricks.headless.Request.*;

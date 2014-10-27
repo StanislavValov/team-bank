@@ -25,6 +25,7 @@ public class BankServiceTest {
     private BankService bankService;
     private FakeRequestReader fakeRequestReader;
     private TransactionStatus transactionStatus;
+    private Amount amount = new Amount();
     private DTOAmount dtoAmount = new DTOAmount();
 
     @Rule
@@ -49,6 +50,8 @@ public class BankServiceTest {
 
         bankService = new BankService(bankRepository, validator, siteMap);
 
+        amount.setAmount("123");
+
         dtoAmount.setAmount("123");
 
         fakeRequestReader = new FakeRequestReader(dtoAmount);
@@ -65,10 +68,10 @@ public class BankServiceTest {
                 oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
-                oneOf(validator).isValid(dtoAmount);
+                oneOf(validator).isValid(amount);
                 will(returnValue(true));
 
-                oneOf(bankRepository).deposit(new BigDecimal(dtoAmount.getAmount()));
+                oneOf(bankRepository).deposit(new BigDecimal(amount.getAmount()));
                 will(returnValue(transactionStatus));
             }
         });
@@ -87,7 +90,7 @@ public class BankServiceTest {
                 oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
-                oneOf(validator).isValid(dtoAmount);
+                oneOf(validator).isValid(amount);
                 will(returnValue(false));
 
                 oneOf(siteMap).transactionError();
@@ -101,7 +104,7 @@ public class BankServiceTest {
     @Test
     public void withdrawAmount() {
 
-        dtoAmount.setAmount("123");
+        amount.setAmount("123");
 
         context.checking(new Expectations() {
             {
@@ -109,10 +112,10 @@ public class BankServiceTest {
                 oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
-                oneOf(validator).isValid(dtoAmount);
+                oneOf(validator).isValid(amount);
                 will(returnValue(true));
 
-                oneOf(bankRepository).withdraw(new BigDecimal(dtoAmount.getAmount()));
+                oneOf(bankRepository).withdraw(new BigDecimal(amount.getAmount()));
                 will(returnValue(transactionStatus));
             }
         });
@@ -130,7 +133,7 @@ public class BankServiceTest {
                 oneOf(request).read(DTOAmount.class);
                 will(returnValue(fakeRequestReader));
 
-                oneOf(validator).isValid(dtoAmount);
+                oneOf(validator).isValid(amount);
                 will(returnValue(false));
 
                 oneOf(siteMap).transactionError();

@@ -13,6 +13,7 @@ import java.util.Locale;
  */
 public class FakeHttpResponse implements HttpServletResponse {
 
+
     @Override
     public void addCookie(Cookie cookie) {
 

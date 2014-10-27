@@ -18,13 +18,17 @@ import static org.hamcrest.core.IsNull.nullValue;
  */
 public class RegistrationCtrlTest {
     private RegistrationCtrl registrationCtrl;
-    private DTOUser dtoUser = new DTOUser();
+    private User user = new User("name", "pass");
+
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
+
     @Mock
     UserRepository repository;
+
     @Mock
     Validator validator;
+
     @Mock
     SiteMap siteMap;
 
@@ -35,14 +39,19 @@ public class RegistrationCtrlTest {
 
     @Test
     public void createAccount() {
+
         final Optional<User> optional = Optional.absent();
+
         context.checking(new Expectations() {
             {
-                oneOf(validator).isValid(dtoUser);
+                oneOf(validator).isValid(user);
                 will(returnValue(true));
+
                 oneOf(repository).findByName(null);
                 will(returnValue(optional));
-                oneOf(repository).add(dtoUser);
+
+                oneOf(repository).add(user);
+
                 oneOf(siteMap).loginPage();
                 will(returnValue("/login"));
             }
@@ -52,10 +61,12 @@ public class RegistrationCtrlTest {
 
     @Test
     public void userAlreadyExists() {
+
         final Optional<User> optional = Optional.fromNullable(new User("name", "pass"));
+
         context.checking(new Expectations() {
             {
-                oneOf(validator).isValid(dtoUser);
+                oneOf(validator).isValid(user);
                 will(returnValue(true));
                 oneOf(repository).findByName(null);
                 will(returnValue(optional));
@@ -67,11 +78,14 @@ public class RegistrationCtrlTest {
 
     @Test
     public void userDataAreNotCorrect() {
+
         final Optional<User> optional = Optional.absent();
+
         context.checking(new Expectations() {
             {
-                oneOf(validator).isValid(dtoUser);
+                oneOf(validator).isValid(user);
                 will(returnValue(false));
+                
                 oneOf(siteMap).dataMissmatch();
             }
         });

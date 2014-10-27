@@ -1,9 +1,6 @@
 package com.clouway.http;
 
-import com.clouway.core.DTOUser;
-import com.clouway.core.SiteMap;
-import com.clouway.core.UserRepository;
-import com.clouway.core.Validator;
+import com.clouway.core.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -37,7 +34,9 @@ public class RegistrationCtrl {
     @Post
     public String register() {
 
-        if (!validator.isValid(dtoUser)) {
+        User user = new User(dtoUser.getUsername(),dtoUser.getPassword());
+
+        if (!validator.isValid(user)) {
             error = siteMap.dataMissmatch();
             return null;
         }
@@ -45,7 +44,7 @@ public class RegistrationCtrl {
             error = siteMap.occupiedUsername();
             return null;
         }
-        repository.add(dtoUser);
+        repository.add(user);
         return siteMap.loginPage();
     }
 

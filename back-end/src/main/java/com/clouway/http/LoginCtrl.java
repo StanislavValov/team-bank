@@ -44,13 +44,15 @@ public class LoginCtrl {
     @Post
     public String authenticate(HttpServletResponse response) {
 
-        if (!userRepository.find(dtoUser).isPresent()) {
+        User user = new User(dtoUser.getUsername(),dtoUser.getPassword());
+
+        if (!userRepository.find(user).isPresent()) {
             error = siteMap.loginFailed();
-            return "/login";
+            return null;
         }
 
-        String sessionId = idGenerator.generateFor(dtoUser);
-        sessionRepository.addUser(dtoUser.getUsername(), sessionId);
+        String sessionId = idGenerator.generateFor(user);
+        sessionRepository.addUser(user.getName(), sessionId);
         response.addCookie(new Cookie(siteMap.sessionCookieName(), sessionId));
         return "/";
     }

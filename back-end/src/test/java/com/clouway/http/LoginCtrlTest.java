@@ -23,12 +23,12 @@ import static org.hamcrest.core.Is.is;
  */
 public class LoginCtrlTest {
 
-    @Rule
-    public JUnitRuleMockery context = new JUnitRuleMockery();
-
-    private DTOUser dtoUser;
+    private User user;
     private LoginCtrl loginCtrl;
     private FakeHttpResponse response;
+
+    @Rule
+    public JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Mock
     UserRepository userRepository;
@@ -45,7 +45,7 @@ public class LoginCtrlTest {
     @Before
     public void setUp() {
 
-        dtoUser = new DTOUser();
+        user = new User("name","password");
         loginCtrl = new LoginCtrl(userRepository, sessionRepository, idGenerator, siteMap);
 
         response = new FakeHttpResponse() {
@@ -62,16 +62,17 @@ public class LoginCtrlTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(userRepository).find(dtoUser);
-                will(returnValue(Optional.of(dtoUser)));
+                oneOf(userRepository).find(user);
+                will(returnValue(Optional.of(user)));
 
-                oneOf(idGenerator).generateFor(dtoUser);
+                oneOf(idGenerator).generateFor(user);
                 will(returnValue("sessionId"));
+
+                oneOf(sessionRepository).addUser(user.getName(), "sessionId");
 
                 oneOf(siteMap).sessionCookieName();
                 will(returnValue("sId"));
 
-                oneOf(sessionRepository).addUser(dtoUser.getUsername(), "sessionId");
             }
         });
         assertThat(loginCtrl.authenticate(response), is("/"));
@@ -82,7 +83,7 @@ public class LoginCtrlTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(userRepository).find(dtoUser);
+                oneOf(userRepository).find(user);
                 will(returnValue(Optional.absent()));
 
                 oneOf(siteMap).loginFailed();

@@ -45,9 +45,10 @@ public class BankService {
     public Reply<?> deposit(Request request) {
 
         DTOAmount dtoAmount = request.read(DTOAmount.class).as(Json.class);
+        Amount amount = new Amount(dtoAmount.getAmount());
 
-        if (validator.isValid(dtoAmount)) {
-            TransactionStatus info = bankRepository.deposit(new BigDecimal(dtoAmount.getAmount()));
+        if (validator.isValid(amount)) {
+            TransactionStatus info = bankRepository.deposit(new BigDecimal(amount.getAmount()));
             return Reply.with(info).as(Json.class);
         }
         return Reply.with(siteMap.transactionError()).error();
@@ -58,9 +59,10 @@ public class BankService {
     public Reply<?> withdraw(Request request) {
 
         DTOAmount dtoAmount = request.read(DTOAmount.class).as(Json.class);
+        Amount amount = new Amount(dtoAmount.getAmount());
 
-        if (validator.isValid(dtoAmount)) {
-            TransactionStatus status = bankRepository.withdraw(new BigDecimal(dtoAmount.getAmount()));
+        if (validator.isValid(amount)) {
+            TransactionStatus status = bankRepository.withdraw(new BigDecimal(amount.getAmount()));
             return Reply.with(status).as(Json.class);
         }
         return Reply.with(siteMap.transactionError()).error();
