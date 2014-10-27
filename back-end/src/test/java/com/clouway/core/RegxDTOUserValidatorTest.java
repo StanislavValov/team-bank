@@ -11,40 +11,34 @@ import static org.hamcrest.core.Is.is;
 public class RegxDTOUserValidatorTest {
 
     RegxUserValidator validator = new RegxUserValidator();
-    DTOUser DTOUser = new DTOUser();
 
     @Test
     public void userValidation() {
-        DTOUser.setUsername("Brahmaputra");
-        DTOUser.setPassword("111111");
-        assertThat(validator.isValid(DTOUser), is(true));
+        User user = new User("Brahmaputra", "111111");
+        assertThat(validator.isValid(user), is(true));
     }
 
     @Test
     public void usernameIsTooShort() {
-        DTOUser.setUsername("Bra");
-        DTOUser.setPassword("123456");
-        assertThat(validator.isValid(DTOUser), is(false));
+        User user = new User("Bra", "123456");
+        assertThat(validator.isValid(user), is(false));
     }
 
     @Test
     public void usernameIsTooLong() {
-        DTOUser.setUsername("BrahmaputrafromMountain");
-        DTOUser.setPassword("123456");
-        assertThat(validator.isValid(DTOUser), is(false));
+        User user = new User("BrahmaputrafromMountain", "123456");
+        assertThat(validator.isValid(user), is(false));
     }
 
     @Test
     public void passwordIsTooShort() {
-        DTOUser.setUsername("Brahmaputra");
-        DTOUser.setPassword("123");
-        assertThat(validator.isValid(DTOUser), is(false));
+        User user = new User("Brahmaputra", "123");
+        assertThat(validator.isValid(user), is(false));
     }
 
     @Test
     public void passwordIsTooLong() {
-        DTOUser.setUsername("Brahmaputra");
-        DTOUser.setPassword("123456789123456789123");
-        assertThat(validator.isValid(DTOUser), is(false));
+        User user = new User("Brahmaputra", "123456789123456789123");
+        assertThat(validator.isValid(user), is(false));
     }
 }
